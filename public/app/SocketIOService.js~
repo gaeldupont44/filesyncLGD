@@ -42,8 +42,8 @@ angular.module('FileSync')
       onViewersUpdated: function(f) {
         socket.on('viewers:updated', f);
       },
-      lgdWrite: function(file) {
-        socket.emit('lgd:write', file);
+      lgdWrite: function(fileName, text) {
+        socket.emit('lgd:write', { name: fileName, text: text});
       },
       onLGDUpdated: function(file) {
         socket.on('lgd:updated', file);

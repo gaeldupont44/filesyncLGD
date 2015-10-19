@@ -5,9 +5,9 @@ var express = require('express');
 var path = require('path');
 var app = express();
 var _ = require('lodash');
-
 var logger = require('winston');
 var config = require('./config')(logger);
+var fs = require('fs');
 
 app.use(express.static(path.resolve(__dirname, './public')));
 
@@ -27,6 +27,24 @@ sio.set('authorization', function(handshakeData, accept) {
   handshakeData.isAdmin = handshakeData._query.access_token === config.auth.token;
   accept(null, true);
 });
+
+function FileLGD(fileName){
+  this.fileName = fileName;
+
+  this.write = function(text){
+    fs.writeFileSync(fileName, text, function (err) {
+      if (err) throw err;
+      console.log('saved to ' + fileName + ": " + text);
+      return text;
+    })
+  }
+}
+
+function Message(nickname, msg) {
+  this.nickname = nickname;
+  this.msg = msg;
+  console.log('Nouvel objet Message créé');
+}
 
 function Viewers(sio) {
   var data = [];
@@ -63,6 +81,24 @@ sio.on('connection', function(socket) {
     viewers.add(nickname);
     console.log('new viewer with nickname %s', nickname, viewers);
   });
+
+  socket.on('message:new', function(message) {
+    var message = new Message(socket.nickname, message);
+    sio.emit('message:updated', message);
+    console.log('Nouveau message: '+ message);
+  });
+
+  socket.on('lgd:write', function(file) {
+    fs.writeFileSync(file.name, file.text, "utf8");
+    console.log("Ecriture dans " + file.name + ": " + file.text);
+    sio.emit('lgd:updated', file);
+  });
+
+  socket.on('lgd:read', function(fileName) {
+     var text = fs.readFileSync(fileName, "utf8");
+     console.log(text);
+     socket.emit('lgd:updated', { name: fileName, text: text });
+   });
 
   socket.on('disconnect', function() {
     viewers.remove(socket.nickname);

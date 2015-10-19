@@ -9,7 +9,7 @@ angular
     this.text = '';
     this.lgdWrite = function() {
       console.log(this.text);
-      SocketIOService.lgdWrite({ name: this.fileName, text: this.text });
+      SocketIOService.lgdWrite(this.text);
       console.log("veux ecrire : " + this.text);
     };
     this.sendMessage = function() {

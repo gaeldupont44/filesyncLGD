@@ -36,7 +36,7 @@
         <div class="row-fluid">
           <h4 class="col-xs-12">{{ social.fileName }}</h4>
           <form>
-	  <textarea ng-model="social.text" ng-change="social.lgdWrite()"></textarea>
+	  <textarea ng-model="text" ng-change="lgdWrite()"></textarea>
           </form>
         </div>
     <div id="leftBox" class="container" ng-controller="HistoryCtrl as history">
