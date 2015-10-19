@@ -11,7 +11,11 @@
     "filesync-relay": "./bin/filesync-relay",
     "filesync-server": "./bin/filesync-server"
   },
-  "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com/)",
+  "author": {
+    "name": "Francois-Guillaume Ribreau",
+    "email": "npm@fgribreau.com",
+    "url": "http://fgribreau.com/"
+  },
   "bugs": {
     "url": "https://github.com/FGRibreau/filesync/issues"
   },
@@ -32,5 +36,9 @@
     "socket.io": "^1.3.5",
     "socket.io-client": "^1.3.5",
     "winston": "1.*.*"
-  }
+  },
+  "readme": "Unidirectional 1-N file syncing with history and *local merging* [![Build Status](https://drone.io/github.com/FGRibreau/filesync/status.png)](https://drone.io/github.com/FGRibreau/filesync/latest)\n================================================================\n\nThis is a **proof of concept** AND **a work in progress**, don't share the word, yet.\n\n# Motivation\n\n> “We are in 2015 and my students still have to copy what I wrote on a screen while I teach them something. This is a long and tedious process that slow down the lectures.\n> \n> Google Document-like tools should NEVER be used for sharing code, we want syntax highlighting and static analysis not copy/pasting code inside an online document each time we make a change.\n> \n> Online IDEs are NOT a solution. I have my own finely tuned editor, my students have theirs, we don't want to temporarily trade our workflow comfort for a lecture.\n> \n> Both solution are stupid.\n> \n> I want a tool that will allow each students to retrieve in real-time my edits while keeping their own local modifications. This tool will work with any editor/IDE because we sync at the file-system level. Each modifications will be display in an history log and would be either merged locally or dropped definitely.”\n\n> — 03/06/2015\n\n## Current status\n\nFileSync was first made during a lecture on AngularJS/Socket.io/NodeJS with IUT Nantes students on 3rd March 2015.\n\n<p align=\"center\">\n<img style=\"width:100%\" src=\"https://cloud.githubusercontent.com/assets/138050/6541935/e75fa8cc-c4e8-11e4-9cf2-a1a04fc05816.gif\">\n</p>\n\n## Setup\n\n```\nnpm i filesync -g\nfilesync-server\nfilesync-relay /path/to/directory\n```\n\n## [Changelog](/CHANGELOG.md)\n\n## Contribute / TODO\n\nSee [issues](https://github.com/FGRibreau/filesync/issues) there is still a lot of things to do/improve note that **I will happily merge any pull-requests that solve each of the specified issues**.\n\n## Bonus\n\nSince this tool is primary build for teaching, it will also display the number of students that don't currently have the page on focus using HTML5 Page Visibility API. (But yeah they can always open another browser window, in the end that feature was mainly developed for fun...)\n",
+  "readmeFilename": "README.md",
+  "_id": "filesync@2.2.0",
+  "_from": "filesync@"
 }
