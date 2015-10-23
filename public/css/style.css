@@ -116,3 +116,9 @@
     width: 75%;
     float: left;
 }
+
+#LGDtext {
+ height: 500px;
+ width: 75%;
+ resize: none;
+}

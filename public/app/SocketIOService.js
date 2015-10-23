@@ -4,13 +4,14 @@ angular.module('FileSync')
     var socket = io();
     var _onFileChanged = _.noop;
     var _onVisibilityStatesChanged = _.noop;
+    var nickname = '';
 
     socket.on('connect', function() {
-      console.log('connected');
-      var login = prompt('Entrez votre pseudo:');
-      socket.emit('viewer:new', login);
-      socket.emit('lgd:read', 'message.txt');
-    });
+      	console.log('connected');
+      	nickname = prompt('Entrez votre pseudo:');
+      	socket.emit('viewer:new', nickname);
+      	socket.emit('lgd:read', 'message.txt');
+    	});
     socket.on('conversation',function(messages){
 	socket.emit('viewers', messages);
     });
@@ -43,6 +44,7 @@ angular.module('FileSync')
         socket.on('viewers:updated', f);
       },
       lgdWrite: function(file) {
+	file.by = nickname;
         socket.emit('lgd:write', file);
       },
       onLGDUpdated: function(file) {

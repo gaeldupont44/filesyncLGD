@@ -33,12 +33,13 @@
       </form>
     </div>
     <div class="container" ng-controller="SocialCtrl as social">
-        <div class="row-fluid">
-          <h4 class="col-xs-12">{{ social.fileName }}</h4>
-          <form>
-	  <textarea ng-model="social.text" ng-change="social.lgdWrite()"></textarea>
-          </form>
-        </div>
+      <div class="row-fluid">
+        <h4 class="col-xs-12">{{ social.fileName }}</h4>
+	<textarea id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-click="social.getCursorPos($event)" ng-keyup="social.getCursorPos($event)"></textarea>
+<div> Cursor Position : <b ng-bind="social.cursorPosVal"></b></div>
+      </div>
+    </div>
+
     <div id="leftBox" class="container" ng-controller="HistoryCtrl as history">
       <div class="history">
         <div class="row-fluid">
