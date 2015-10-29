@@ -46,22 +46,15 @@ angular
       this.modifBy = file.by;
       //Récurétion de la position du curseur
       this.getCaretPosition(taField);
+      var inputFocused = document.activeElement;
       $scope.$apply();
       //Positionnement du curseur à la position récupérée
       this.setCaretPosition(taField, this.cursorPosVal);
-      //Refocus de l'élément
-      this.setInputFocus(this.inputFocused);
+      inputFocused.focus();
     }
 
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
 
-    this.getInputFocus = function($event) {
-      this.inputFocused = $event.target;
-    };
-
-    /*this.setInputFocus = function(element) {
-      element.focus ();
-    };*/
     this.cursorPosVal = -1;
     //Lors de la modification de la position du cursor
     this.getCursorPos = function($event) {
@@ -74,14 +67,14 @@ angular
     this.getCaretPosition = function(taField) {
 	var CaretPos = 0;
 	// IE Support
-	/*if (document.selection) {
+	if (document.selection) {
 		taField.focus ();
 		var Sel = document.selection.createRange ();
 		Sel.moveStart ('character', -taField.value.length);
 		CaretPos = Sel.text.length;
 	}
 	// Firefox support
-	else*/ if (taField.selectionStart || taField.selectionStart == '0')
+	else if (taField.selectionStart || taField.selectionStart == '0')
 		CaretPos = taField.selectionStart;
        this.cursorPosVal = CaretPos;
      };

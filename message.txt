@@ -1,9 +1,9 @@
-sfmais sinon tip top
+mais sinon c'est tip top
 dans le css, pour le bord du tchat, met le juste à gauche, pas besoin d'un cadre entier ;)
 juste a gauche ?
 
 yep, actuelement le cadre entoure toute la parti tchat
-mais ce serait plus jolie d'avoir juste une délimitation entre le tchat et l reste
+mais ce serait plus jolie d'avoir juste une délimitation entre le tchat et le reste
 je partage mon écran je te montre
 
 arf, obligé d'etre en vocal pour ça
