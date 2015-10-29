@@ -27,6 +27,7 @@
         <input type="text"
         id="chatInput"
         ng-model="social.message"
+        ng-focus="social.getInputFocus($event)"
         name="name"
         class="form-control"
         placeholder="Ecrire un texte.." />
@@ -36,7 +37,7 @@
         <div><h4>{{ social.fileName }}</h4><h5>Dernière modification par: {{ social.modifBy }}</h5></div>
         
       <div id="LGDzone">
-	<textarea id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-click="social.getCursorPos($event)" ng-keyup="social.getCursorPos($event)"></textarea>
+	<textarea id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-click="social.getCursorPos($event)" ng-keyup="social.getCursorPos($event)" ng-focus="social.getInputFocus($event)"></textarea>
         </div>
       </div>
     </div>

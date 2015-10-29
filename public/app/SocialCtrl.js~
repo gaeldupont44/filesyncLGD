@@ -23,7 +23,6 @@ angular
         element.scrollTop = element.scrollHeight;
       }
       this.messages.push(message);
-      
       $scope.$apply();
       this.message = "";
       setTimeout(updateHTML, 250);
@@ -40,49 +39,55 @@ angular
     
 
     function onLGDUpdated(file) {
+      
       var taField = document.getElementById("LGDtext");
       this.fileName = file.name;
       this.text = file.text;
       this.modifBy = file.by;
+      //Récurétion de la position du curseur
       this.getCaretPosition(taField);
       $scope.$apply();
+      //Positionnement du curseur à la position récupérée
       this.setCaretPosition(taField, this.cursorPosVal);
+      //Refocus de l'élément
+      this.setInputFocus(this.inputFocused);
     }
 
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
 
+    this.getInputFocus = function($event) {
+      this.inputFocused = $event.target;
+    };
+
+    /*this.setInputFocus = function(element) {
+      element.focus ();
+    };*/
     this.cursorPosVal = -1;
-    /* se bloque permet de mettre a jour la position du cursor à chaque déplacement de celui ci
-	(evenement récupérer par ng-click et ng-keyup)
+    //Lors de la modification de la position du cursor
     this.getCursorPos = function($event) {
       var myEl = $event.target;
       this.getCaretPosition(myEl);
-    };*/
+      //envoyer la nouvelle position
+
+    };
+
     this.getCaretPosition = function(taField) {
- 
 	var CaretPos = 0;
 	// IE Support
-	if (document.selection) {
- 
+	/*if (document.selection) {
 		taField.focus ();
 		var Sel = document.selection.createRange ();
- 
 		Sel.moveStart ('character', -taField.value.length);
- 
 		CaretPos = Sel.text.length;
 	}
 	// Firefox support
-	else if (taField.selectionStart || taField.selectionStart == '0')
+	else*/ if (taField.selectionStart || taField.selectionStart == '0')
 		CaretPos = taField.selectionStart;
- 
        this.cursorPosVal = CaretPos;
- 
      };
 
    this.setCaretPosition = function(taField, pos) {
- 
-	if(taField.setSelectionRange)
-	{
+	if(taField.setSelectionRange){
 		taField.focus();
 		taField.setSelectionRange(pos,pos);
 	}
