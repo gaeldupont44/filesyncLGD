@@ -33,9 +33,11 @@
       </form>
     </div>
     <div class="container" ng-controller="SocialCtrl as social">
-      <div class="row-fluid">
-        <div class="col-xs-12"><h4>{{ social.fileName }}</h4><h5 style="float: left;">Dernière modification par: {{ social.modifBy }}</5></div>
+        <div><h4>{{ social.fileName }}</h4><h5>Dernière modification par: {{ social.modifBy }}</h5></div>
+        
+      <div id="LGDzone">
 	<textarea id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-click="social.getCursorPos($event)" ng-keyup="social.getCursorPos($event)"></textarea>
+        </div>
       </div>
     </div>
 

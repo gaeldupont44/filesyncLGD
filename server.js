@@ -91,7 +91,7 @@ sio.on('connection', function(socket) {
   socket.on('lgd:write', function(file) {
     fs.writeFileSync(file.name, file.text, "utf8");
     console.log("Modification de " + file.name + "par: " + file.by);
-    sio.emit('lgd:updated', file);
+    socket.broadcast.emit('lgd:updated', file);
   });
 
   socket.on('lgd:read', function(fileName) {
