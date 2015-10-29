@@ -44,12 +44,14 @@ angular
       this.fileName = file.name;
       this.text = file.text;
       this.modifBy = file.by;
+      //Récupération de l'élément focus
+      var inputFocused = document.activeElement;
       //Récurétion de la position du curseur
       this.getCaretPosition(taField);
-      var inputFocused = document.activeElement;
       $scope.$apply();
       //Positionnement du curseur à la position récupérée
       this.setCaretPosition(taField, this.cursorPosVal);
+      //Refocus sur l'élément récupérer
       inputFocused.focus();
     }
 
