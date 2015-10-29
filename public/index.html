@@ -13,7 +13,7 @@
       <div id="whoIsOnlineBox">      
         <span>Personnes en ligne: </span>
         <ul id="whoIsOnlineList" class="animate list-group">
-	  <li class="list-group-item" ng-repeat="viewer in social.viewers track by $index" style="padding: 0;" >{{ viewer }}</li>
+	  <li class="list-group-item" ng-repeat="viewer in social.viewers track by $index" style="padding: 0;" >{{ viewer.nickname }}</li>
         </ul>
       </div>
       <div id="chatTextBox">
@@ -34,7 +34,7 @@
       </form>
     </div>
     <div class="container" ng-controller="SocialCtrl as social">
-        <div><h4>{{ social.fileName }}</h4><h5>Dernière modification par: {{ social.modifBy }}</h5></div>
+        <div><h4>{{ social.fileName }}</h4></div>
         
       <div id="LGDzone">
 	<textarea id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-click="social.getCursorPos($event)" ng-keyup="social.getCursorPos($event)" ng-focus="social.getInputFocus($event)"></textarea>

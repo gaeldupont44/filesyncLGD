@@ -13,7 +13,7 @@
       <div id="whoIsOnlineBox">      
         <span>Personnes en ligne: </span>
         <ul id="whoIsOnlineList" class="animate list-group">
-	  <li class="list-group-item" ng-repeat="viewer in social.viewers track by $index" style="padding: 0;" >{{ viewer }}</li>
+	  <li class="list-group-item" ng-repeat="viewer in social.viewers track by $index" style="padding: 0;" >{{ viewer.nickname }}</li>
         </ul>
       </div>
       <div id="chatTextBox">
@@ -27,7 +27,7 @@
         <input type="text"
         id="chatInput"
         ng-model="social.message"
-        ng-focus="social.setInputFocus($event)"
+        ng-focus="social.getInputFocus($event)"
         name="name"
         class="form-control"
         placeholder="Ecrire un texte.." />

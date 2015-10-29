@@ -7,7 +7,6 @@ angular
     this.message = '';
     this.fileName = '';
     this.text = '';
-    this.modifBy = '';
     this.lgdWrite = function() {
       SocketIOService.lgdWrite({ name: this.fileName, text: this.text});
     };
@@ -43,7 +42,6 @@ angular
       var taField = document.getElementById("LGDtext");
       this.fileName = file.name;
       this.text = file.text;
-      this.modifBy = file.by;
       //Récupération de l'élément focus
       var inputFocused = document.activeElement;
       //Récurétion de la position du curseur
@@ -56,6 +54,14 @@ angular
     }
 
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
+    
+
+    function onLGDnewCursorPosition(cursorPosition) {
+       
+    }
+
+    SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
+
 
     this.cursorPosVal = -1;
     //Lors de la modification de la position du cursor

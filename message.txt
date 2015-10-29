@@ -1,3 +1,4 @@
+hi
 mais sinon c'est tip top
 dans le css, pour le bord du tchat, met le juste à gauche, pas besoin d'un cadre entier ;)
 juste a gauche ?

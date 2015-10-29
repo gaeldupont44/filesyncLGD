@@ -44,11 +44,13 @@ angular.module('FileSync')
         socket.on('viewers:updated', f);
       },
       lgdWrite: function(file) {
-	file.by = nickname;
         socket.emit('lgd:write', file);
       },
       onLGDUpdated: function(file) {
         socket.on('lgd:updated', file);
+      },
+      onLGDnewCursorPosition: function(cursorPosition) {
+        socket.on('lgd:newCursorPosition', cursorPosition);
       },
       onFileChanged: function(f) {
         _onFileChanged = f;
