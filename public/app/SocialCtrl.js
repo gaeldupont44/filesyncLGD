@@ -31,9 +31,9 @@ angular
 
     function onViewersUpdated(viewers) {
       var taField = document.getElementById("LGDtext");
+      
       var viewersRect = document.getElementsByClassName("viewers");
-      var len = viewersRect.length;
-      for (var i = 0; i < len; i++) {
+      for(var i= 0; i < viewersRect.length; i++){
         viewersRect[i].parentNode.removeChild(viewersRect[i]);
       }
 
