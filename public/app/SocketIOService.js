@@ -49,8 +49,8 @@ angular.module('FileSync')
       onLGDUpdated: function(file) {
         socket.on('lgd:updated', file);
       },
-      onLGDnewCursorPosition: function(cursorPosition) {
-        socket.on('lgd:newCursorPosition', cursorPosition);
+      changeCursorPosition: function(position){
+        socket.emit('lgd:changeCursor', position);
       },
       onFileChanged: function(f) {
         _onFileChanged = f;

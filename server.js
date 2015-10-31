@@ -47,6 +47,11 @@ function Viewers(sio) {
       data.push(viewer);
       notifyChanges();
     },
+    updatePos: function updatePos(viewer, position) {
+      var idx = data.indexOf(viewer);
+      data[idx].cursorPosition = position;
+      notifyChanges();
+    },
     remove: function remove(viewer) {
       var idx = data.indexOf(viewer);
       if (idx > -1) {
@@ -88,7 +93,10 @@ sio.on('connection', function(socket) {
      console.log(text);
      socket.emit('lgd:updated', { name: fileName, text: text });
    });
-
+  socket.on('lgd:changeCursor', function(position) {
+    viewers.updatePos(socket.viewer, position);
+    socket.viewer.cursorPosition = position;
+  });
   socket.on('disconnect', function() {
     viewers.remove(socket.viewer);
   });
