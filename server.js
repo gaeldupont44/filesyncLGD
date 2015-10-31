@@ -81,18 +81,19 @@ sio.on('connection', function(socket) {
     sio.emit('message:updated', message);
     console.log('Nouveau message: '+ message);
   });
-
+  //Write in the file
   socket.on('lgd:write', function(file) {
     fs.writeFileSync(file.name, file.text, "utf8");
     console.log("Modification de " + file.name);
     socket.broadcast.emit('lgd:updated', file);
   });
-
+  //Read the file (only for first use)
   socket.on('lgd:read', function(fileName) {
      var text = fs.readFileSync(fileName, "utf8");
      console.log(text);
      socket.emit('lgd:updated', { name: fileName, text: text });
-   });
+  });
+  //Change the value of the caret position of the viewer
   socket.on('lgd:changeCursor', function(position) {
     viewers.updatePos(socket.viewer, position);
     socket.viewer.cursorPosition = position;

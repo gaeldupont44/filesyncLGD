@@ -27,17 +27,16 @@
         <input type="text"
         id="chatInput"
         ng-model="social.message"
-        ng-focus="social.getInputFocus($event)"
         name="name"
         class="form-control"
         placeholder="Ecrire un texte.." />
       </form>
     </div>
     <div class="container" ng-controller="SocialCtrl as social">
-        <div><h4>{{ social.fileName }}</h4><h5>Dernière modification par: {{ social.modifBy }}</h5></div>
+        <div><h4>{{ social.fileName }}</h4></div>
         
       <div id="LGDzone">
-	<textarea id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-click="social.getCursorPos($event)" ng-keyup="social.getCursorPos($event)" ng-focus="social.getInputFocus($event)"></textarea>
+	<textarea id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-click="social.changeCursorPosition($event)" ng-keyup="social.changeCursorPosition($event)" ng-blur="social.resetCursorPosition($event)"></textarea>
         </div>
       </div>
     </div>
@@ -85,7 +84,9 @@
         </div>
       </div><!-- / -->
     </div><!-- /container -->
-    
+    <script>
+      
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="/components/angular/angular.js" type="text/javascript"></script>
     <script src="/components/angular-animate/angular-animate.js" type="text/javascript"></script>
@@ -94,6 +95,7 @@
     <script src="/components/moment/moment.js" type="text/javascript"></script>
     <script src="/components/lodash/lodash.js" type="text/javascript"></script>
     <script src="/components/visibilityjs/lib/visibility.core.js" type="text/javascript"></script>
+    <script src="/components/textarea-caret-position/index.js" type="text/javascript"></script>
     <script src="/socket.io/socket.io.js" type="text/javascript"></script>
     <script src="/app/app.js" type="text/javascript"></script>
     <script src="/app/HistoryCtrl.js" type="text/javascript"></script>

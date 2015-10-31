@@ -75,66 +75,40 @@ angular
     }
 
     SocketIOService.onViewersUpdated(onViewersUpdated.bind(this));
-/*    
-    ['input[type="text"]', 'textarea'].forEach(function (selector) {
-        var element = document.querySelector(selector);
-        var fontSize = getComputedStyle(element).getPropertyValue('font-size');
-        var rect = document.createElement('div');
-        document.body.appendChild(rect);
-        rect.style.position = 'absolute';
-        rect.style.backgroundColor = 'red';
-        rect.style.height = fontSize;
-        rect.style.width = '1px';
-        ['keyup', 'click', 'scroll'].forEach(function (event) {
-         element.addEventListener(event, update);
-        });
-        function update() {
-          var coordinates = getCaretCoordinates(element, element.selectionEnd);
-          console.log('(top, left) = (%s, %s)', coordinates.top, coordinates.left);
-          rect.style.top = element.offsetTop
-            - element.scrollTop
-            + coordinates.top
-            + 'px';
-          rect.style.left = element.offsetLeft
-            - element.scrollLeft
-            + coordinates.left
-            + 'px';
-        }
-      });
-*/
+
     function onLGDUpdated(file) {
       
       var taField = document.getElementById("LGDtext");
       this.fileName = file.name;
       this.text = file.text;
-      //Récupération de l'élément focus
+      //Recover the focus element
       var inputFocused = document.activeElement;
-      //Récurétion de la position du curseur
+      //Recover the position of the caret
       this.getCaretPosition(taField);
       $scope.$apply();
-      //Positionnement du curseur à la position récupérée
+      //Set Caret position of the previous position recovered
       this.setCaretPosition(taField, this.cursorPosVal);
-      //Refocus sur l'élément récupérer
+      //Refocus on the element previously focused
       inputFocused.focus();
     }
 
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
-    
 
-    //Initialisation de la position à -1 (Non focus)
+    //set the garet position to -1 (No focus)
     this.cursorPosVal = -1;
 
-    //Lors de la modification de la position du cursor
+    //when cursor position change
     this.changeCursorPosition = function($event) {
       var myEl = $event.target;
-      //Récupération de la nouvelle position
+      //Recover the new position
       this.getCaretPosition(myEl);
-      //envoyer la nouvelle position
+      //send new position
       SocketIOService.changeCursorPosition(this.cursorPosVal);
     };
+    //when defocus
     this.resetCursorPosition = function($event) {
       var myEl = $event.target;
-      //envoyer la nouvelle position
+      //send no focus position
       SocketIOService.changeCursorPosition(-1);
     };
     this.getCaretPosition = function(taField) {
@@ -151,7 +125,7 @@ angular
 		CaretPos = taField.selectionStart;
        this.cursorPosVal = CaretPos;
      };
-
+   //change the caret position
    this.setCaretPosition = function(taField, pos) {
 	if(taField.setSelectionRange){
 		taField.focus();
