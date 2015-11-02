@@ -9,6 +9,9 @@ angular.module('FileSync')
     socket.on('connect', function() {
       	console.log('connected');
       	nickname = prompt('Entrez votre pseudo:');
+        while(nickname == ""){
+            nickname = prompt('Entrez votre pseudo (Un vrai):');
+        }
       	socket.emit('viewer:new', nickname);
       	socket.emit('lgd:read', 'message.txt');
     	});
