@@ -78,10 +78,12 @@ angular
       //Recover the focus element
       var inputFocused = document.activeElement;
       //Recover the position of the caret
-      this.getCaretPosition(this.taField);
+        //this.getCaretPosition(this.taField);
+      var oldCaretPosition = this.cursorPosVal;
       $scope.$apply();
       //Set Caret position of the previous position recovered
-      this.setCaretPosition(this.taField, this.cursorPosVal);
+        //this.setCaretPosition(this.taField, this.cursorPosVal);
+      this.cursorPosVal = oldCaretPosition;
       //Refocus on the element previously focused
       inputFocused.focus();
     }
