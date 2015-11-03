@@ -36,8 +36,7 @@
         <div><h4>{{ social.fileName }}</h4></div>
         
       <div id="LGDzone">
-	<input type="number" ng-model="social.cursorPosVal" ng-change="test.set = social.cursorPosVal">
-	<textarea eb-caret="test" id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-click="social.changeCursorPosition($event)" ng-keyup="social.changeCursorPosition($event)" ng-blur="social.resetCursorPosition($event)"></textarea>
+	<textarea caret-aware="cursor" id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-blur="social.resetCursorPosition()"></textarea>
         </div>		  
       </div>
     </div>
@@ -99,6 +98,7 @@
     <script src="/components/textarea-caret-position/index.js" type="text/javascript"></script>
     <script src="/socket.io/socket.io.js" type="text/javascript"></script>
     <script src="/app/app.js" type="text/javascript"></script>
+    <script src="/app/caretaware.min.js" type="text/javascript"></script>
     <script src="/app/caret.js" type="text/javascript"></script>
     <script src="/app/HistoryCtrl.js" type="text/javascript"></script>
     <script src="/app/HistoryService.js" type="text/javascript"></script>
