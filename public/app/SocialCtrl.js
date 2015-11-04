@@ -29,21 +29,20 @@ angular
     }
 
     SocketIOService.onViewersUpdated(onViewersUpdated.bind(this));
-    //if a viewer write the file
+    //when a viewer write the file
     function onLGDUpdated(file) {
       //Recover the focus element
       var inputFocused = document.activeElement;
       //Recover the position of the caret
-      this.oldCaretPosition = $scope.cursor;
+      var oldCaretPosition = $scope.cursor;
       this.fileName = file.name;
       this.text = file.text;
       $scope.$apply;
       //Refocus on the element previously focused
       inputFocused.focus();
       //Set Caret position of the previous position recovered
-      $scope.cursor = this.oldCaretPosition;
+      $scope.cursor = oldCaretPosition;
     }
-
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
     //on caret position change
     $scope.$watch("cursor", function(caretPosition) {
