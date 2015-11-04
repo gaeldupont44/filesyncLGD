@@ -34,7 +34,7 @@ angular
       //Recover the focus element
       var inputFocused = document.activeElement;
       //Recover the position of the caret
-      var oldCaretPosition = $scope.cursor;
+      oldCaretPosition = $scope.cursor;
       this.fileName = file.name;
       this.text = file.text;
       $scope.$apply;
