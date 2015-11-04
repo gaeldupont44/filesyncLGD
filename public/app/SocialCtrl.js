@@ -34,17 +34,19 @@ angular
       var inputFocused = document.activeElement;
       //Recover the position of the caret
       var oldCaretPosition = $scope.cursor;
-      console.log("oldCaretPosition: " + oldCaretPosition);
-      console.log("cursor1:"+$scope.cursor);
+      console.log(oldCaretPosition);
+      console.log($scope.cursor);
       this.fileName = file.name;
       this.text = file.text;
-      $scope.$apply;
-      //Refocus on the element previously focused
-      inputFocused.focus();
-      console.log("cursor2:"+$scope.cursor);
       //Set Caret position of the previous position recovered
       $scope.cursor = oldCaretPosition;
-      console.log("cursor3:"+$scope.cursor);
+      $scope.$apply;
+      //Set Caret position of the previous position recovered
+      $scope.cursor = oldCaretPosition;
+      //Refocus on the element previously focused
+      inputFocused.focus();
+      //Set Caret position of the previous position recovered
+      $scope.cursor = oldCaretPosition;
     }
 
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
