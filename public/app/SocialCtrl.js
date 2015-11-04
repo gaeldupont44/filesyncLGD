@@ -6,6 +6,7 @@ angular
     this.messages = [];
     this.message = '';
     this.fileName = '';
+    var oldCaretPosition = '0';
     this.lgdWrite = function() {
       SocketIOService.lgdWrite({ name: this.fileName, text: this.text});
     };
@@ -33,20 +34,14 @@ angular
       //Recover the focus element
       var inputFocused = document.activeElement;
       //Recover the position of the caret
-      var oldCaretPosition = $scope.cursor;
-      console.log(oldCaretPosition);
-      console.log($scope.cursor);
+      this.oldCaretPosition = $scope.cursor;
       this.fileName = file.name;
       this.text = file.text;
-      //Set Caret position of the previous position recovered
-      $scope.cursor = oldCaretPosition;
       $scope.$apply;
-      //Set Caret position of the previous position recovered
-      $scope.cursor = oldCaretPosition;
       //Refocus on the element previously focused
       inputFocused.focus();
       //Set Caret position of the previous position recovered
-      $scope.cursor = oldCaretPosition;
+      $scope.cursor = this.oldCaretPosition;
     }
 
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
