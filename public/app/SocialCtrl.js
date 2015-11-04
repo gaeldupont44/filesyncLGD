@@ -30,17 +30,21 @@ angular
     SocketIOService.onViewersUpdated(onViewersUpdated.bind(this));
     //if a viewer write the file
     function onLGDUpdated(file) {
-      this.fileName = file.name;
-      this.text = file.text;
       //Recover the focus element
       var inputFocused = document.activeElement;
       //Recover the position of the caret
       var oldCaretPosition = $scope.cursor;
-      $scope.$apply();
+      console.log("oldCaretPosition: " + oldCaretPosition);
+      console.log("cursor1:"+$scope.cursor);
+      this.fileName = file.name;
+      this.text = file.text;
+      $scope.$apply;
       //Refocus on the element previously focused
       inputFocused.focus();
+      console.log("cursor2:"+$scope.cursor);
       //Set Caret position of the previous position recovered
       $scope.cursor = oldCaretPosition;
+      console.log("cursor3:"+$scope.cursor);
     }
 
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
@@ -89,7 +93,7 @@ angular
             //if viewer is focusing textarea
             if(viewers[i].cursorPosition > -1) {
               var coordinates = getCaretCoordinates(element[0], viewers[i].cursorPosition);
-              console.log(viewers[i].nickname, coordinates.top, coordinates.left);
+              //console.log(viewers[i].nickname, coordinates.top, coordinates.left);
               var rect = document.createElement('div');
               rect.setAttribute("class", "viewers");
               rect.innerHTML = viewers[i].nickname;
