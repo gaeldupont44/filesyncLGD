@@ -37,10 +37,10 @@ angular
       //Recover the position of the caret
       var oldCaretPosition = $scope.cursor;
       $scope.$apply();
-      //Set Caret position of the previous position recovered
-      $scope.cursor = oldCaretPosition;
       //Refocus on the element previously focused
       inputFocused.focus();
+      //Set Caret position of the previous position recovered
+      $scope.cursor = oldCaretPosition;
     }
 
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
