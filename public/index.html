@@ -34,9 +34,8 @@
     </div>
     <div class="container" ng-controller="SocialCtrl as social">
         <div><h4>{{ social.fileName }}</h4></div>
-        
       <div id="LGDzone">
-	<textarea caret-aware="cursor" id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-blur="social.resetCursorPosition()"></textarea>
+	<textarea rect-viewers viewers="social.viewers" caret-aware="cursor" id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-blur="social.resetCursorPosition()"></textarea>
         </div>		  
       </div>
     </div>
