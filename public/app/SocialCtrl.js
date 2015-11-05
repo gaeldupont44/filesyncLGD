@@ -49,7 +49,7 @@ angular
     });
 
     //on caret position change
-    $scope.$watch(["text"], function(newValue, oldValue, scope) {
+    $scope.$watch("text", function(newValue, oldValue, scope) {
         $scope.cursor = scope.social.oldCaretPosition;
         console.log(scope);
         console.log("$scope.cursor: " + $scope.cursor);
