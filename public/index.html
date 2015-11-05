@@ -35,7 +35,7 @@
     <div class="container" ng-controller="SocialCtrl as social">
         <div><h4>{{ social.fileName }}</h4></div>
       <div id="LGDzone">
-	<textarea rect-viewers viewers="social.viewers" caret-aware="cursor" id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-blur="social.resetCursorPosition()"></textarea>
+	<textarea lgd-update viewers="social.viewers" caret-aware="cursor" id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-blur="social.resetCursorPosition()"></textarea>
         </div>		  
       </div>
     </div>
@@ -106,3 +106,4 @@
     <script src="/app/VisibilityService.js" type="text/javascript"></script>
   </body>
 </html>
+

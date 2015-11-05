@@ -1,2 +1,2 @@
-FileSyncLGD
+filesyncLGD
 Like Google Docs

@@ -32,7 +32,6 @@ sio.set('authorization', function(handshakeData, accept) {
 function Message(nickname, msg) {
   this.nickname = nickname;
   this.msg = msg;
-  console.log('Nouvel objet Message créé');
 }
 
 function Viewers(sio) {
@@ -79,7 +78,7 @@ sio.on('connection', function(socket) {
   socket.on('message:new', function(message) {
     var message = new Message(socket.viewer.nickname, message);
     sio.emit('message:updated', message);
-    console.log('Nouveau message: '+ message);
+    console.log('Nouveau message: ' + message.msg);
   });
   //Write in the file
   socket.on('lgd:write', function(file) {
@@ -95,8 +94,10 @@ sio.on('connection', function(socket) {
   });
   //Change the value of the caret position of the viewer
   socket.on('lgd:changeCursor', function(position) {
+    if(socket.viewer != undefined){
     viewers.updatePos(socket.viewer, position);
     socket.viewer.cursorPosition = position;
+    }
   });
   socket.on('disconnect', function() {
     viewers.remove(socket.viewer);

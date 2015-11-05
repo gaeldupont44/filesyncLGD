@@ -6,7 +6,6 @@ angular
     this.messages = [];
     this.message = '';
     this.fileName = '';
-    this.oldCaretPosition = 0;
     this.lgdWrite = function() {
       SocketIOService.lgdWrite({ name: this.fileName, text: this.text});
     };
@@ -31,32 +30,18 @@ angular
     SocketIOService.onViewersUpdated(onViewersUpdated.bind(this));
     //when a viewer write the file
     function onLGDUpdated(file) {
-      //Recover the focus element
-      var inputFocused = document.activeElement;
-      //Recover the position of the caret
-      this.oldCaretPosition = $scope.cursor;
       this.fileName = file.name;
       this.text = file.text;
       $scope.$apply;
-      //Refocus on the element previously focused
-      inputFocused.focus();
-      //Set Caret position of the previous position recovered;
     }
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
     //on caret position change
     $scope.$watch("cursor", function(caretPosition) {
+      if(caretPosition != undefined){
         SocketIOService.sendCursorPosition(caretPosition);
+      }
     });
 
-    //on caret position change
-    $scope.$watch("text", function(newValue, oldValue, scope) {
-        $scope.cursor = scope.social.oldCaretPosition;
-        console.log(scope);
-        console.log("$scope.cursor: " + $scope.cursor);
-        console.log("$scope.oldCaretPosition: " + $scope.oldCaretPosition);
-        console.log("scope.social.cursor: " + scope.social.cursor);
-        console.log("scope.social.oldCaretPosition: " + scope.social.oldCaretPosition);
-    });
 
     //on defocus
     this.resetCursorPosition = function() {
@@ -77,20 +62,38 @@ angular
       );
     }
   };
-}).directive("rectViewers", function(){
+}).directive("lgdUpdate", function(){
+  //set caret position of the element used when file change
+  function setCaretPos(element, caretPos) {
+    if (element.createTextRange) {
+      var range = element.createTextRange();
+      range.move('character', caretPos);
+      range.select();
+    } else {
+      element.focus();
+      if (element.selectionStart !== undefined) {
+        element.setSelectionRange(caretPos, caretPos);
+      }
+    }
+  }
+
   return {
     scope: {
       viewers: "=viewers",
       file: "=ngModel",
-      mycaret: "=caretAware"
+      caret: "=caretAware"
     },
     link: function(scope, element, attrs) {
+      //watch if scope.file change
       scope.$watch(
         function () {
           return scope.file;
         },
           function (){
-            console.log(scope.mycaret);
+            var inputFocused = document.activeElement;
+            //update position of the caret
+            setCaretPos(element[0], scope.caret);
+            inputFocused.focus();
           });
 
       scope.$watch(
@@ -142,4 +145,3 @@ angular
     }
   }
 });
-    
