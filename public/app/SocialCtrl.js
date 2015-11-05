@@ -6,7 +6,7 @@ angular
     this.messages = [];
     this.message = '';
     this.fileName = '';
-    var oldCaretPosition = '0';
+    this.oldCaretPosition = 0;
     this.lgdWrite = function() {
       SocketIOService.lgdWrite({ name: this.fileName, text: this.text});
     };
@@ -34,20 +34,30 @@ angular
       //Recover the focus element
       var inputFocused = document.activeElement;
       //Recover the position of the caret
-      oldCaretPosition = $scope.cursor;
+      this.oldCaretPosition = $scope.cursor;
       this.fileName = file.name;
       this.text = file.text;
       $scope.$apply;
       //Refocus on the element previously focused
       inputFocused.focus();
-      //Set Caret position of the previous position recovered
-      $scope.cursor = oldCaretPosition;
+      //Set Caret position of the previous position recovered;
     }
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
     //on caret position change
     $scope.$watch("cursor", function(caretPosition) {
         SocketIOService.sendCursorPosition(caretPosition);
     });
+
+    //on caret position change
+    $scope.$watch(["text"], function(newValue, oldValue, scope) {
+        $scope.cursor = scope.social.oldCaretPosition;
+        console.log(scope);
+        console.log("$scope.cursor: " + $scope.cursor);
+        console.log("$scope.oldCaretPosition: " + $scope.oldCaretPosition);
+        console.log("scope.social.cursor: " + scope.social.cursor);
+        console.log("scope.social.oldCaretPosition: " + scope.social.oldCaretPosition);
+    });
+
     //on defocus
     this.resetCursorPosition = function() {
       //send defocused position
@@ -70,9 +80,18 @@ angular
 }).directive("rectViewers", function(){
   return {
     scope: {
-      viewers: "=viewers"
+      viewers: "=viewers",
+      file: "=ngModel",
+      mycaret: "=caretAware"
     },
     link: function(scope, element, attrs) {
+      scope.$watch(
+        function () {
+          return scope.file;
+        },
+          function (){
+            console.log(scope.mycaret);
+          });
 
       scope.$watch(
         function () {
@@ -123,3 +142,4 @@ angular
     }
   }
 });
+    
