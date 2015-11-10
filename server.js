@@ -112,14 +112,17 @@ sio.on('connection', function(socket) {
   });
   //Write in the file
   socket.on('lgd:write', function(text) {
+    if(socket.viewer.currentFilePath !== ''){
+    console.log('path:'+socket.viewer.currentFilePath);
     fs.writeFileSync(socket.viewer.currentFilePath, text, "utf8");
     console.log("Modification de " + socket.viewer.currentFilePath);
     //faire une boucle sur les socket qui ont le meme currentFilePath
     socket.broadcast.to(socket.viewer.currentFilePath).emit('lgd:updated', text);
+    }
   });
   //Change the file to write
   socket.on('lgd:changeFile', function(path) {
-     if(path != undefined){
+     if(path !== undefined){
        socket.leave(socket.viewer.currentFilePath);
        socket.join(path);
        console.log('Changement de fichier: ' + path);

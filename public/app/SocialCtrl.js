@@ -40,7 +40,6 @@ angular
 
     //when a viewer write the file
     function onLGDUpdated(text) {
-      console.log(text);
       this.text = text;
       $scope.$apply();
     }
@@ -98,7 +97,7 @@ angular
     
     link: function (scope, element, attrs, SocialCtrl) {
       if (angular.isArray(scope.member.children)) {
-        element.append("<li><span class='LGDdirs'>{{member.name}}</span></li><collection collection='member.children'></collection>");
+        element.append("<li><span class='LGDdirs'>{{member.name}}/</span></li><collection collection='member.children'></collection>");
       } else {
         element.append("<li><lgdfile lgdfile='member'></lgdfile></li>");
       }
