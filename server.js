@@ -27,7 +27,31 @@ sio.set('authorization', function(handshakeData, accept) {
   handshakeData.isAdmin = handshakeData._query.access_token === config.auth.token;
   accept(null, true);
 });
+var dirLGD = getAllLGDFiles('LGD');
 
+function getAllLGDFiles(folder) {
+    var fileContents = fs.readdirSync(folder),
+        fileTree = [],
+        stats;
+
+    fileContents.forEach(function (fileName) {
+        stats = fs.lstatSync(folder + '/' + fileName);
+
+        if (stats.isDirectory()) {
+            fileTree.push({
+                name: fileName,
+                children: getAllLGDFiles(folder + '/' + fileName)
+            });
+        } else {
+            fileTree.push({
+                name: fileName,
+                path: folder + '/' + fileName
+            });
+        }
+    });
+
+    return fileTree;
+};
 
 function Message(nickname, msg) {
   this.nickname = nickname;
@@ -44,6 +68,11 @@ function Viewers(sio) {
   return {
     add: function add(viewer) {
       data.push(viewer);
+      notifyChanges();
+    },
+    updateCFP: function updateCFP(viewer, path) {
+      var idx = data.indexOf(viewer);
+      data[idx].currentFilePath = path;
       notifyChanges();
     },
     updatePos: function updatePos(viewer, position) {
@@ -70,9 +99,10 @@ sio.on('connection', function(socket) {
 
   // console.log('nouvelle connexion', socket.id);
   socket.on('viewer:new', function(name) {
-    socket.viewer = { nickname: name, cursorPosition: -1 };
+    socket.viewer = { nickname: name, currentFilePath: '', cursorPosition: -1, };
     viewers.add(socket.viewer);
     console.log('new viewer with nickname %s', socket.viewer.nickname, viewers);
+    socket.emit('lgd:dir', dirLGD);
   });
 
   socket.on('message:new', function(message) {
@@ -81,16 +111,24 @@ sio.on('connection', function(socket) {
     console.log('Nouveau message: ' + message.msg);
   });
   //Write in the file
-  socket.on('lgd:write', function(file) {
-    fs.writeFileSync(file.name, file.text, "utf8");
-    console.log("Modification de " + file.name);
-    socket.broadcast.emit('lgd:updated', file);
+  socket.on('lgd:write', function(text) {
+    fs.writeFileSync(socket.viewer.currentFilePath, text, "utf8");
+    console.log("Modification de " + socket.viewer.currentFilePath);
+    //faire une boucle sur les socket qui ont le meme currentFilePath
+    socket.broadcast.to(socket.viewer.currentFilePath).emit('lgd:updated', text);
   });
-  //Read the file (only for first use)
-  socket.on('lgd:read', function(fileName) {
-     var text = fs.readFileSync(fileName, "utf8");
-     console.log(text);
-     socket.emit('lgd:updated', { name: fileName, text: text });
+  //Change the file to write
+  socket.on('lgd:changeFile', function(path) {
+     if(path != undefined){
+       socket.leave(socket.viewer.currentFilePath);
+       socket.join(path);
+       console.log('Changement de fichier: ' + path);
+       viewers.updateCFP(socket.viewer, path);
+       socket.viewer.currentFilePath = path;
+       var text = fs.readFileSync(path, "utf8");
+       console.log(text);
+       socket.emit('lgd:updated', text);
+     }
   });
   //Change the value of the caret position of the viewer
   socket.on('lgd:changeCursor', function(position) {

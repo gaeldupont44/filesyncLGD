@@ -124,7 +124,7 @@ body {
     float: left;
 }
 
-#LGDzone {
+#LGDBox {
     margin-top: 10px;
     background-color: white;
     height: 600px;
@@ -139,4 +139,26 @@ body {
     margin-left: 5%;
     width: 90%;
     resize: none;
+}
+#ListFilesBox {
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid black;
+    width: 75%;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.LGDdirs {
+    background-color: darkgray;
+    color: white;
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid gray;
+}
+.LGDfiles {
+    background-color: gray;
+    color: white;
+    border-radius: 5px;
 }

@@ -13,7 +13,7 @@ angular.module('FileSync')
             nickname = prompt('Entrez votre pseudo (Un vrai):');
         }
       	socket.emit('viewer:new', nickname);
-      	socket.emit('lgd:read', 'message.txt');
+      	//socket.emit('lgd:read', 'message.txt');
     	});
     socket.on('conversation',function(messages){
 	socket.emit('viewers', messages);
@@ -46,11 +46,17 @@ angular.module('FileSync')
       onViewersUpdated: function(f) {
         socket.on('viewers:updated', f);
       },
-      lgdWrite: function(file) {
-        socket.emit('lgd:write', file);
+      onLGDdirUpdated: function(dir){
+        socket.on('lgd:dir', dir);
       },
-      onLGDUpdated: function(file) {
-        socket.on('lgd:updated', file);
+      changeLGDfile: function(path){
+        socket.emit('lgd:changeFile', path);
+      },
+      lgdWrite: function(text) {
+        socket.emit('lgd:write', text);
+      },
+      onLGDUpdated: function(text) {
+        socket.on('lgd:updated', text);
       },
       sendCursorPosition: function(position){
         socket.emit('lgd:changeCursor', position);

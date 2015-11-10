@@ -5,10 +5,15 @@ angular
     this.viewers = [];
     this.messages = [];
     this.message = '';
-    this.fileName = '';
+    this.LGDdir = [];
+    this.path = '';
+    this.text = '';
     this.lgdWrite = function() {
-      SocketIOService.lgdWrite({ name: this.fileName, text: this.text});
+      SocketIOService.lgdWrite(this.text);
     };
+    this.changeLGDfile = function(path){
+      SocketIOService.changeLGDfile(path);
+    }
     this.sendMessage = function() {
       console.log(this.message);
       SocketIOService.sendMessage(this.message);
@@ -19,22 +24,28 @@ angular
       this.messages.push(message);
       $scope.$apply();
     }
-
     SocketIOService.onMessagesUpdated(onMessagesUpdated.bind(this));
 
     function onViewersUpdated(viewers) {
       this.viewers = viewers;
       $scope.$apply();
     }
-
     SocketIOService.onViewersUpdated(onViewersUpdated.bind(this));
+    
+    function onLGDdirUpdated(dir){
+      this.LGDdir = dir;
+      $scope.$apply();
+    }
+    SocketIOService.onLGDdirUpdated(onLGDdirUpdated.bind(this));
+
     //when a viewer write the file
-    function onLGDUpdated(file) {
-      this.fileName = file.name;
-      this.text = file.text;
-      $scope.$apply;
+    function onLGDUpdated(text) {
+      console.log(text);
+      this.text = text;
+      $scope.$apply();
     }
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
+
     //on caret position change
     $scope.$watch("cursor", function(caretPosition) {
       if(caretPosition != undefined){
@@ -60,6 +71,53 @@ angular
           element.animate({ scrollTop: element.prop('scrollHeight')}, 500);
         }
       );
+    }
+  };
+}).directive('collection', function () {
+  return {
+    restrict: "E",
+    replace: true,
+    scope: {
+      collection: '='
+    },
+    template: "<ul class='listFiles'><member ng-repeat='member in collection' member='member'></member></ul>"
+  };
+})
+
+.directive('member', function ($compile) {
+  function test(){
+  console.log('testeur');
+  }
+  return {
+    restrict: "E",
+    replace: true,
+    controller: 'SocialCtrl',
+    scope: {
+      member: '='
+    },
+    
+    link: function (scope, element, attrs, SocialCtrl) {
+      if (angular.isArray(scope.member.children)) {
+        element.append("<li><span class='LGDdirs'>{{member.name}}</span></li><collection collection='member.children'></collection>");
+      } else {
+        element.append("<li><lgdfile lgdfile='member'></lgdfile></li>");
+      }
+      $compile(element.contents())(scope);
+    }
+  };
+}).directive('lgdfile', function () {
+  return {
+    restrict: "E",
+    replace: true,
+    controller: 'SocialCtrl',
+    scope: {
+      lgdfile: '='
+    },
+    template: "<input class='LGDfiles' type='button' value='{{lgdfile.name}}'/>",
+    link: function (scope, element, attrs, SocialCtrl) {
+      element.bind('click', function() {
+        SocialCtrl.changeLGDfile(scope.lgdfile.path);
+      });
     }
   };
 }).directive("lgdUpdate", function(){
