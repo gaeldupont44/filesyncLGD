@@ -7,15 +7,19 @@ angular
     this.message = '';
     this.LGDdir = [];
     this.path = '';
-    this.text = '';
+    this.filename = 'Nom du Fichier';
+    this.filepath = '';
+    this.text = "Veuillez cliquer sur un fichier de l'arborescence";
     this.lgdWrite = function() {
       SocketIOService.lgdWrite(this.text);
     };
-    this.changeLGDfile = function(path){
-      SocketIOService.changeLGDfile(path);
+    this.changeLGDfile = function(file){
+      this.filename = file.name;
+      this.filepath = file.path;
+      $scope.$apply();
+      SocketIOService.changeLGDfile(file.path);
     }
     this.sendMessage = function() {
-      console.log(this.message);
       SocketIOService.sendMessage(this.message);
       this.message = "";
     };
@@ -52,7 +56,6 @@ angular
       }
     });
 
-
     //on defocus
     this.resetCursorPosition = function() {
       //send defocused position
@@ -81,12 +84,7 @@ angular
     },
     template: "<ul class='listFiles'><member ng-repeat='member in collection' member='member'></member></ul>"
   };
-})
-
-.directive('member', function ($compile) {
-  function test(){
-  console.log('testeur');
-  }
+}).directive('member', function ($compile) {
   return {
     restrict: "E",
     replace: true,
@@ -94,7 +92,6 @@ angular
     scope: {
       member: '='
     },
-    
     link: function (scope, element, attrs, SocialCtrl) {
       if (angular.isArray(scope.member.children)) {
         element.append("<li><span class='LGDdirs'>{{member.name}}/</span></li><collection collection='member.children'></collection>");
@@ -108,14 +105,14 @@ angular
   return {
     restrict: "E",
     replace: true,
-    controller: 'SocialCtrl',
+    require: '^ngController', //Solve recursive problem
     scope: {
       lgdfile: '='
     },
     template: "<input class='LGDfiles' type='button' value='{{lgdfile.name}}'/>",
     link: function (scope, element, attrs, SocialCtrl) {
       element.bind('click', function() {
-        SocialCtrl.changeLGDfile(scope.lgdfile.path);
+        SocialCtrl.changeLGDfile(scope.lgdfile);
       });
     }
   };
@@ -137,14 +134,14 @@ angular
   return {
     scope: {
       viewers: "=viewers",
-      file: "=ngModel",
+      //file: "=ngModel",
       caret: "=caretAware"
     },
     link: function(scope, element, attrs) {
       //watch if scope.file change
       scope.$watch(
         function () {
-          return scope.file;
+          return scope.$parent.social.file;
         },
           function (){
             var inputFocused = document.activeElement;
@@ -166,7 +163,8 @@ angular
           //for all viewers
           for(var i = 0 ; i < viewers.length ; i++){
             //if viewer is focusing textarea
-            if(viewers[i].cursorPosition > -1) {
+            console.log(scope.$parent.social.filename);
+            if(viewers[i].cursorPosition > -1 && viewers[i].currentFilePath == scope.$parent.social.filepath) {
               var coordinates = getCaretCoordinates(element[0], viewers[i].cursorPosition);
               //console.log(viewers[i].nickname, coordinates.top, coordinates.left);
               var rect = document.createElement('div');
