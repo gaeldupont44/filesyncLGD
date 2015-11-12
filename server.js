@@ -9,6 +9,15 @@ var logger = require('winston');
 var config = require('./config')(logger);
 var fs = require('fs');
 
+var pathLGD = path.resolve(__dirname, process.argv[2]);
+console.log(process.argv[2]);
+if (!pathLGD) {
+  logger.error("Usage: node server.js /path/to/directory");
+  process.exit(1);
+}
+
+logger.info('Like Google Docs listening on %s', pathLGD);
+
 app.use(express.static(path.resolve(__dirname, './public')));
 
 app.get('/', function(req, res) {
@@ -27,7 +36,7 @@ sio.set('authorization', function(handshakeData, accept) {
   handshakeData.isAdmin = handshakeData._query.access_token === config.auth.token;
   accept(null, true);
 });
-var dirLGD = getAllLGDFiles('LGD');
+var dirLGD = getAllLGDFiles(pathLGD);
 
 function getAllLGDFiles(folder) {
     var fileContents = fs.readdirSync(folder),
