@@ -23,7 +23,12 @@ angular
       SocketIOService.sendMessage(this.message);
       this.message = "";
     };
-
+    this.createLGDfile = function(path, name) {
+      SocketIOService.createLGDfile(path + '/' + name);
+    };
+    this.removeLGDfile = function(path) {
+      SocketIOService.removeLGDfile(path);
+    };
     function onMessagesUpdated(message) {
       this.messages.push(message);
       $scope.$apply();
@@ -88,17 +93,66 @@ angular
   return {
     restrict: "E",
     replace: true,
-    controller: 'SocialCtrl',
+    require: '^ngController', //Solve recursive problem
     scope: {
       member: '='
     },
     link: function (scope, element, attrs, SocialCtrl) {
       if (angular.isArray(scope.member.children)) {
-        element.append("<li><span class='LGDdirs'>{{member.name}}/</span></li><collection collection='member.children'></collection>");
+        element.append("<li><span class='LGDdirs'>{{member.name}}/</span>"+
+          "<newfile />"+
+          "<newfileform />"+
+          "</li>"+
+          "<collection collection='member.children'></collection>");
       } else {
-        element.append("<li><lgdfile lgdfile='member'></lgdfile></li>");
+        element.append("<li><removefile /><lgdfile lgdfile='member'></lgdfile></li>");
       }
       $compile(element.contents())(scope);
+    }
+  };
+}).directive('newfile', function () {
+  return {
+    restrict: "E",
+    replace: true,
+    template: "<input class='newFile' type='button' value='+'/>",
+    link: function (scope, element, attrs) {
+      element.bind('click', function() {
+        if(element[0].value === '+'){
+          element[0].value = '-';
+          element.next()[0].style.display = 'inline';
+        } else {
+          element[0].value = '+';
+          element.next()[0].style.display = 'none';
+        }
+        
+      });
+    }
+  };
+}).directive('newfileform', function () {
+  return {
+    restrict: "E",
+    require: '^ngController', //Solve recursive problem
+    replace: true,
+    template: "<form style='display: none;'>"+
+          "<input type='text' placeholder='New file name' />"+
+          "<input type='submit' value='Créer' />"+
+          "</form>",
+    link: function (scope, element, attrs, SocialCtrl) {
+      element.bind('submit', function() {
+          SocialCtrl.createLGDfile(scope.member.path, element[0].firstChild.value);
+      });
+    }
+  };
+}).directive('removefile', function () {
+  return {
+    restrict: "E",
+    require: '^ngController', //Solve recursive problem
+    replace: true,
+    template: "<input class='removeFile' type='button' value='-'/>",
+    link: function (scope, element, attrs, SocialCtrl) {
+      element.bind('click', function() {
+        SocialCtrl.removeLGDfile(scope.member.path);
+      });
     }
   };
 }).directive('lgdfile', function () {

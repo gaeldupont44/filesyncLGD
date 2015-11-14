@@ -49,6 +49,12 @@ angular.module('FileSync')
       onLGDdirUpdated: function(dir){
         socket.on('lgd:dir', dir);
       },
+      createLGDfile: function(file){
+        socket.emit('lgd:createFile', file);
+      },
+      removeLGDfile: function(file){
+        socket.emit('lgd:removeFile', file);
+      },
       changeLGDfile: function(path){
         socket.emit('lgd:changeFile', path);
       },

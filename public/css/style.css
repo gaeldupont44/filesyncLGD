@@ -163,3 +163,12 @@ body {
     border-radius: 5px;
     font-size: 12px;
 }
+.newFile {
+    background-color: #CCFFFF;
+    border-radius: 10px;
+}
+
+.removeFile {
+    background-color: #FFFF99;
+    border-radius: 10px;
+}

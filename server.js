@@ -49,6 +49,7 @@ function getAllLGDFiles(folder) {
         if (stats.isDirectory()) {
             fileTree.push({
                 name: fileName,
+                path: folder + "/" + fileName,
                 children: getAllLGDFiles(folder + '/' + fileName)
             });
         } else {
@@ -128,6 +129,24 @@ sio.on('connection', function(socket) {
     //faire une boucle sur les socket qui ont le meme currentFilePath
     socket.broadcast.to(socket.viewer.currentFilePath).emit('lgd:updated', text);
     }
+  });
+  //Create new file
+  socket.on('lgd:createFile', function(file) {
+     if(file !== undefined){
+       console.log("create:" + path);
+       fs.writeFileSync(file, '', "utf8");
+       dirLGD = getAllLGDFiles(pathLGD);
+       sio.emit('lgd:dir', dirLGD);
+     }
+  });
+  //Remove a file
+  socket.on('lgd:removeFile', function(path) {
+     if(path !== undefined){
+      console.log("rm:" + path);
+       fs.unlinkSync(path);
+       dirLGD = getAllLGDFiles(pathLGD);
+       sio.emit('lgd:dir', dirLGD);
+     }
   });
   //Change the file to write
   socket.on('lgd:changeFile', function(path) {
