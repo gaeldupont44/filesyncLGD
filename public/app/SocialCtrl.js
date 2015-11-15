@@ -23,6 +23,18 @@ angular
       SocketIOService.sendMessage(this.message);
       this.message = "";
     };
+    this.createLGDrootDir = function() {
+      SocketIOService.createLGDrootDir($scope.DirName);
+    };
+    this.createLGDdir = function(path, name) {
+      SocketIOService.createLGDdir(path + '/' + name);
+    };
+    this.removeLGDdir = function(path) {
+      SocketIOService.removeLGDdir(path);
+    };
+    this.createLGDrootFile = function() {
+      SocketIOService.createLGDrootFile($scope.FileName);
+    };
     this.createLGDfile = function(path, name) {
       SocketIOService.createLGDfile(path + '/' + name);
     };
@@ -99,7 +111,9 @@ angular
     },
     link: function (scope, element, attrs, SocialCtrl) {
       if (angular.isArray(scope.member.children)) {
-        element.append("<li><span class='LGDdirs'>{{member.name}}/</span>"+
+        element.append("<li><removedir /><span class='LGDdirs'>{{member.name}}/</span>"+
+          "<newdir />"+
+          "<newdirform />"+
           "<newfile />"+
           "<newfileform />"+
           "</li>"+
@@ -114,14 +128,14 @@ angular
   return {
     restrict: "E",
     replace: true,
-    template: "<input class='newFile' type='button' value='+'/>",
+    template: "<input class='newFile' type='button' value='fichier'/>",
     link: function (scope, element, attrs) {
       element.bind('click', function() {
-        if(element[0].value === '+'){
+        if(element[0].value === 'fichier'){
           element[0].value = '-';
           element.next()[0].style.display = 'inline';
         } else {
-          element[0].value = '+';
+          element[0].value = 'fichier';
           element.next()[0].style.display = 'none';
         }
         
@@ -134,12 +148,58 @@ angular
     require: '^ngController', //Solve recursive problem
     replace: true,
     template: "<form style='display: none;'>"+
-          "<input type='text' placeholder='New file name' />"+
-          "<input type='submit' value='Créer' />"+
+          "<input type='text' class='LGDFileDirInput' placeholder='Nom du fichier' />"+
+          "<input type='submit' class='LGDFileDirInput' value='Créer' />"+
           "</form>",
     link: function (scope, element, attrs, SocialCtrl) {
       element.bind('submit', function() {
           SocialCtrl.createLGDfile(scope.member.path, element[0].firstChild.value);
+      });
+    }
+  };
+}).directive('newdir', function () {
+  return {
+    restrict: "E",
+    replace: true,
+    template: "<input class='newDir' type='button' value='dossier'/>",
+    link: function (scope, element, attrs) {
+      element.bind('click', function() {
+        if(element[0].value === 'dossier'){
+          element[0].value = '-';
+          element.next()[0].style.display = 'inline';
+        } else {
+          element[0].value = 'dossier';
+          element.next()[0].style.display = 'none';
+        }
+        
+      });
+    }
+  };
+}).directive('newdirform', function () {
+  return {
+    restrict: "E",
+    require: '^ngController', //Solve recursive problem
+    replace: true,
+    template: "<form style='display: none;'>"+
+          "<input type='text' class='LGDFileDirInput' placeholder='Nom du dossier' />"+
+          "<input type='submit' class='LGDFileDirInput' value='Créer' />"+
+          "</form>",
+    link: function (scope, element, attrs, SocialCtrl) {
+      element.bind('submit', function() {
+          SocialCtrl.createLGDdir(scope.member.path, element[0].firstChild.value);
+      });
+    }
+  };
+}).directive('removedir', function () {
+  return {
+    restrict: "E",
+    require: '^ngController', //Solve recursive problem
+    replace: true,
+    template: "<input class='removeDir' type='button' value='-'/>",
+    link: function (scope, element, attrs, SocialCtrl) {
+      element.bind('click', function() {
+        console.log(scope.member.path);
+        SocialCtrl.removeLGDdir(scope.member.path);
       });
     }
   };

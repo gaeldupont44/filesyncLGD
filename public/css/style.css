@@ -163,12 +163,15 @@ body {
     border-radius: 5px;
     font-size: 12px;
 }
-.newFile {
+.newDir, .newFile {
     background-color: #CCFFFF;
     border-radius: 10px;
 }
 
-.removeFile {
+.removeDir, .removeFile {
     background-color: #FFFF99;
     border-radius: 10px;
+}
+.LGDFileDirInput {
+    border-radius: 5px;
 }

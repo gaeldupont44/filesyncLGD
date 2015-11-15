@@ -26,7 +26,6 @@
     "visibilityjs": "~1.2.1",
     "moment": "~2.9.0",
     "highlightjs": "~8.4.0",
-    "angular-highlightjs": "~0.4.1",
-    "textarea-caret-position": "*"
+    "angular-highlightjs": "~0.4.1"
   }
 }

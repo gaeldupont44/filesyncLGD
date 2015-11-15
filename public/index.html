@@ -35,7 +35,20 @@
 
     <div class="container" ng-controller="SocialCtrl as social">
       <div id="ListFilesBox">
-        <collection collection='social.LGDdir'></collection>
+        <ul>
+          <li>
+            <span class='LGDdirs'>/</span>
+            <form style='display: inline;' ng-submit='social.createLGDrootDir()'>
+              <input type='text' class='LGDFileDirInput' ng-model='DirName' name='DirName' placeholder='Nom du dossier' />
+              <input type='submit' class='LGDFileDirInput' value='Créer' />
+              </form>
+            <form style='display: inline;' ng-submit='social.createLGDrootFile()'>
+              <input type='text' class='LGDFileDirInput' ng-model='FileName' name='FileName' placeholder='Nom du fichier' />
+              <input type='submit' class='LGDFileDirInput' value='Créer' />
+            </form>
+          </li>
+          <collection collection='social.LGDdir'></collection>
+        </ul>
       </div>
       
       <h4 ng-bind="social.filename"></h4>
@@ -102,7 +115,6 @@
     <script src="/socket.io/socket.io.js" type="text/javascript"></script>
     <script src="/app/app.js" type="text/javascript"></script>
     <script src="/app/caretaware.min.js" type="text/javascript"></script>
-    <script src="/app/caret.js" type="text/javascript"></script>
     <script src="/app/HistoryCtrl.js" type="text/javascript"></script>
     <script src="/app/HistoryService.js" type="text/javascript"></script>
     <script src="/app/SocketIOService.js" type="text/javascript"></script>

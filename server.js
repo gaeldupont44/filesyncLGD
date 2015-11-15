@@ -130,11 +130,62 @@ sio.on('connection', function(socket) {
     socket.broadcast.to(socket.viewer.currentFilePath).emit('lgd:updated', text);
     }
   });
-  //Create new file
-  socket.on('lgd:createFile', function(file) {
-     if(file !== undefined){
+  //Create new root directory
+  socket.on('lgd:createRootDir', function(name) {
+     if(name !== undefined){
+       console.log("create:" + pathLGD + '/' + name);
+       fs.mkdirSync(pathLGD + '/' + name);
+       dirLGD = getAllLGDFiles(pathLGD);
+       sio.emit('lgd:dir', dirLGD);
+     }
+  });
+  //Create new directory
+  socket.on('lgd:createDir', function(path) {
+     if(path !== undefined){
        console.log("create:" + path);
-       fs.writeFileSync(file, '', "utf8");
+       fs.mkdirSync(path);
+       dirLGD = getAllLGDFiles(pathLGD);
+       sio.emit('lgd:dir', dirLGD);
+     }
+  });
+  //Remove a directory
+  socket.on('lgd:removeDir', function(path) {
+     if(path !== undefined){
+      console.log("rm:" + path);
+       deleteFolderRecursive(path);
+       dirLGD = getAllLGDFiles(pathLGD);
+       sio.emit('lgd:dir', dirLGD);
+     }
+  });
+  function deleteFolderRecursive(path) {
+    var files = [];
+    if( fs.existsSync(path) ) {
+        files = fs.readdirSync(path);
+        files.forEach(function(file,index){
+            var curPath = path + "/" + file;
+            if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};
+  //Create new root directory
+  socket.on('lgd:createRootFile', function(name) {
+     if(name !== undefined){
+       console.log("create:" + pathLGD + '/' + name);
+       fs.writeFileSync(pathLGD + '/' + name, '', "utf8");
+       dirLGD = getAllLGDFiles(pathLGD);
+       sio.emit('lgd:dir', dirLGD);
+     }
+  });
+  //Create new file
+  socket.on('lgd:createFile', function(path) {
+     if(path !== undefined){
+       console.log("create:" + path);
+       fs.writeFileSync(path, '', "utf8");
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
      }
