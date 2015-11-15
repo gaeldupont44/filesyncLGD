@@ -63,6 +63,30 @@ function getAllLGDFiles(folder) {
     return fileTree;
 };
 
+function fileExists(filePath)
+{
+    try
+    {
+        return fs.statSync(filePath).isFile();
+    }
+    catch (err)
+    {
+        return false;
+    }
+}
+
+function dirExists(filePath)
+{
+    try
+    {
+        return fs.statSync(filePath).isDirectory();
+    }
+    catch (err)
+    {
+        return false;
+    }
+}
+
 function Message(nickname, msg) {
   this.nickname = nickname;
   this.msg = msg;
@@ -132,7 +156,7 @@ sio.on('connection', function(socket) {
   });
   //Create new root directory
   socket.on('lgd:createRootDir', function(name) {
-     if(name !== undefined){
+     if(name !== undefined && !dirExists(pathLGD + '/' + name)){
        console.log("create:" + pathLGD + '/' + name);
        fs.mkdirSync(pathLGD + '/' + name);
        dirLGD = getAllLGDFiles(pathLGD);
@@ -141,7 +165,7 @@ sio.on('connection', function(socket) {
   });
   //Create new directory
   socket.on('lgd:createDir', function(path) {
-     if(path !== undefined){
+     if(path !== undefined && !dirExists(path)){
        console.log("create:" + path);
        fs.mkdirSync(path);
        dirLGD = getAllLGDFiles(pathLGD);
@@ -174,7 +198,7 @@ sio.on('connection', function(socket) {
 };
   //Create new root directory
   socket.on('lgd:createRootFile', function(name) {
-     if(name !== undefined){
+     if(name !== undefined && !fileExists(pathLGD + '/' + name)){
        console.log("create:" + pathLGD + '/' + name);
        fs.writeFileSync(pathLGD + '/' + name, '', "utf8");
        dirLGD = getAllLGDFiles(pathLGD);
@@ -183,7 +207,7 @@ sio.on('connection', function(socket) {
   });
   //Create new file
   socket.on('lgd:createFile', function(path) {
-     if(path !== undefined){
+     if(path !== undefined && !fileExists(path)){
        console.log("create:" + path);
        fs.writeFileSync(path, '', "utf8");
        dirLGD = getAllLGDFiles(pathLGD);
