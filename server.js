@@ -10,7 +10,6 @@ var config = require('./config')(logger);
 var fs = require('fs');
 
 var pathLGD = path.resolve(__dirname, process.argv[2]);
-console.log(process.argv[2]);
 if (!pathLGD) {
   logger.error("Usage: node server.js /path/to/directory");
   process.exit(1);
