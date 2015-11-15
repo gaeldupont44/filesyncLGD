@@ -197,7 +197,6 @@ angular
     template: "<input class='removeDir' type='button' value='-'/>",
     link: function (scope, element, attrs, SocialCtrl) {
       element.bind('click', function() {
-        console.log(scope.member.path);
         SocialCtrl.removeLGDdir(scope.member.path);
       });
     }
@@ -249,14 +248,14 @@ angular
   return {
     scope: {
       viewers: "=viewers",
-      //file: "=ngModel",
+      file: "=ngModel",
       caret: "=caretAware"
     },
     link: function(scope, element, attrs) {
       //watch if scope.file change
       scope.$watch(
         function () {
-          return scope.$parent.social.file;
+          return scope.file;
         },
           function (){
             var inputFocused = document.activeElement;
@@ -279,7 +278,6 @@ angular
             //for all viewers
             for(var i = 0 ; i < viewers.length ; i++){
               //if viewer is focusing textarea
-              console.log(scope.$parent.social.filename);
               if(viewers[i].cursorPosition > -1 && viewers[i].currentFilePath == scope.$parent.social.filepath) {
                 var coordinates = getCaretCoordinates(element[0], viewers[i].cursorPosition);
                 //console.log(viewers[i].nickname, coordinates.top, coordinates.left);
