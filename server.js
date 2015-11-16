@@ -145,17 +145,21 @@ sio.on('connection', function(socket) {
   });
   //Write in the file
   socket.on('lgd:write', function(text) {
-    if(socket.viewer.currentFilePath !== ''){
-    console.log('path:'+socket.viewer.currentFilePath);
-    fs.writeFileSync(socket.viewer.currentFilePath, text, "utf8");
-    console.log("Modification de " + socket.viewer.currentFilePath);
-    //faire une boucle sur les socket qui ont le meme currentFilePath
-    socket.broadcast.to(socket.viewer.currentFilePath).emit('lgd:updated', text);
+    if(socket.viewer.currentFilePath !== null){
+      console.log('path:'+socket.viewer.currentFilePath);
+      if(fileExists(socket.viewer.currentFilePath)){
+        fs.writeFileSync(socket.viewer.currentFilePath, text, "utf8");
+        console.log("Modification de " + socket.viewer.currentFilePath);
+        //faire une boucle sur les socket qui ont le meme currentFilePath
+        socket.broadcast.to(socket.viewer.currentFilePath).emit('lgd:updated', text);
+      }
     }
   });
   //Create new root directory
   socket.on('lgd:createRootDir', function(name) {
-     if(name !== undefined && !dirExists(pathLGD + '/' + name)){
+     
+     if(name !== null && !dirExists(pathLGD + '/' + name) && name.indexOf('/') === -1){
+       console.log(name);
        console.log("create:" + pathLGD + '/' + name);
        fs.mkdirSync(pathLGD + '/' + name);
        dirLGD = getAllLGDFiles(pathLGD);
@@ -163,17 +167,17 @@ sio.on('connection', function(socket) {
      }
   });
   //Create new directory
-  socket.on('lgd:createDir', function(path) {
-     if(path !== undefined && !dirExists(path)){
-       console.log("create:" + path);
-       fs.mkdirSync(path);
+  socket.on('lgd:createDir', function(dir) {
+     if(path !== null && !dirExists(dir.path + '/' + dir.name) && dir.name.indexOf('/') === -1){
+       console.log("create:" + dir.path + '/' + dir.name);
+       fs.mkdirSync(dir.path + '/' + dir.name);
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
      }
   });
   //Remove a directory
   socket.on('lgd:removeDir', function(path) {
-     if(path !== undefined){
+     if(path !== null){
       console.log("rm:" + path);
        deleteFolderRecursive(path);
        dirLGD = getAllLGDFiles(pathLGD);
@@ -197,7 +201,7 @@ sio.on('connection', function(socket) {
 };
   //Create new root directory
   socket.on('lgd:createRootFile', function(name) {
-     if(name !== undefined && !fileExists(pathLGD + '/' + name)){
+     if(name !== null && !fileExists(pathLGD + '/' + name) && name.indexOf('/') === -1){
        console.log("create:" + pathLGD + '/' + name);
        fs.writeFileSync(pathLGD + '/' + name, '', "utf8");
        dirLGD = getAllLGDFiles(pathLGD);
@@ -205,17 +209,17 @@ sio.on('connection', function(socket) {
      }
   });
   //Create new file
-  socket.on('lgd:createFile', function(path) {
-     if(path !== undefined && !fileExists(path)){
-       console.log("create:" + path);
-       fs.writeFileSync(path, '', "utf8");
+  socket.on('lgd:createFile', function(file) {
+     if(path !== null && !fileExists(file.path + '/' + file.name) && file.name.indexOf('/') === -1){
+       console.log("create:" + file.path + '/' + file.name);
+       fs.writeFileSync(file.path + '/' + file.name, '', "utf8");
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
      }
   });
   //Remove a file
   socket.on('lgd:removeFile', function(path) {
-     if(path !== undefined){
+     if(path !== null){
       console.log("rm:" + path);
        fs.unlinkSync(path);
        dirLGD = getAllLGDFiles(pathLGD);
@@ -224,7 +228,7 @@ sio.on('connection', function(socket) {
   });
   //Change the file to write
   socket.on('lgd:changeFile', function(path) {
-     if(path !== undefined){
+     if(path !== null){
        socket.leave(socket.viewer.currentFilePath);
        socket.join(path);
        console.log('Changement de fichier: ' + path);
@@ -237,7 +241,7 @@ sio.on('connection', function(socket) {
   });
   //Change the value of the caret position of the viewer
   socket.on('lgd:changeCursor', function(position) {
-    if(socket.viewer != undefined){
+    if(socket.viewer != null){
     viewers.updatePos(socket.viewer, position);
     socket.viewer.cursorPosition = position;
     }

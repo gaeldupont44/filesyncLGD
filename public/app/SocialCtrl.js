@@ -26,7 +26,7 @@ angular
       SocketIOService.createLGDrootDir($scope.DirName);
     };
     this.createLGDdir = function(path, name) {
-      SocketIOService.createLGDdir(path + '/' + name);
+      SocketIOService.createLGDdir({path: path, name: name});
     };
     this.removeLGDdir = function(path) {
       SocketIOService.removeLGDdir(path);
@@ -35,7 +35,7 @@ angular
       SocketIOService.createLGDrootFile($scope.FileName);
     };
     this.createLGDfile = function(path, name) {
-      SocketIOService.createLGDfile(path + '/' + name);
+      SocketIOService.createLGDfile({path: path, name: name });
     };
     this.removeLGDfile = function(path) {
       SocketIOService.removeLGDfile(path);
