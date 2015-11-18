@@ -169,8 +169,10 @@ body {
 }
 
 .removeDir, .removeFile {
-    background-color: #FFFF99;
-    border-radius: 10px;
+    background-color: red;
+    border-radius: 20px;
+    text-align: center;
+    
 }
 .LGDFileDirInput {
     border-radius: 5px;

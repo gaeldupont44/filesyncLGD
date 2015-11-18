@@ -194,10 +194,10 @@ angular
     restrict: "E",
     require: '^ngController', //Solve recursive problem
     replace: true,
-    template: "<input class='removeDir' type='button' value='-'/>",
+    template: "<input class='removeDir' type='button' value='x'/>",
     link: function (scope, element, attrs, SocialCtrl) {
       element.bind('click', function() {
-        SocialCtrl.removeLGDdir(scope.member.path);
+        if (confirm("Voulez-vous vraiment supprimer ce répertoire")){SocialCtrl.removeLGDdir(scope.member.path);}
       });
     }
   };
@@ -206,10 +206,10 @@ angular
     restrict: "E",
     require: '^ngController', //Solve recursive problem
     replace: true,
-    template: "<input class='removeFile' type='button' value='-'/>",
+    template: "<input class='removeFile' type='button' value='x'/>",
     link: function (scope, element, attrs, SocialCtrl) {
       element.bind('click', function() {
-        SocialCtrl.removeLGDfile(scope.member.path);
+        if (confirm("Voulez-vous vraiment supprimer ce fichier")){SocialCtrl.removeLGDfile(scope.member.path);}
       });
     }
   };
