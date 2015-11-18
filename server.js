@@ -62,34 +62,42 @@ function getAllLGDFiles(folder) {
     return fileTree;
 };
 
-function fileExists(filePath)
-{
-    try
-    {
+function fileExists(filePath){
+    try{
         return fs.statSync(filePath).isFile();
-    }
-    catch (err)
-    {
+    }catch (err){
         return false;
     }
-}
+};
 
-function dirExists(filePath)
-{
-    try
-    {
+function dirExists(filePath){
+    try{
         return fs.statSync(filePath).isDirectory();
-    }
-    catch (err)
-    {
+    }catch (err){
         return false;
     }
-}
+};
+
+function deleteFolderRecursive(path) {
+    var files = [];
+    if( fs.existsSync(path) ) {
+        files = fs.readdirSync(path);
+        files.forEach(function(file,index){
+            var curPath = path + "/" + file;
+            if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};
 
 function Message(nickname, msg) {
   this.nickname = nickname;
   this.msg = msg;
-}
+};
 
 function Viewers(sio) {
   var data = [];
@@ -141,8 +149,8 @@ sio.on('connection', function(socket) {
   socket.on('message:new', function(message) {
     var message = new Message(socket.viewer.nickname, message);
     sio.emit('message:updated', message);
-    console.log('Nouveau message: ' + message.msg);
   });
+
   //Write in the file
   socket.on('lgd:write', function(text) {
     if(socket.viewer.currentFilePath !== null){
@@ -150,16 +158,13 @@ sio.on('connection', function(socket) {
       if(fileExists(socket.viewer.currentFilePath)){
         fs.writeFileSync(socket.viewer.currentFilePath, text, "utf8");
         console.log("Modification de " + socket.viewer.currentFilePath);
-        //faire une boucle sur les socket qui ont le meme currentFilePath
         socket.broadcast.to(socket.viewer.currentFilePath).emit('lgd:updated', text);
       }
     }
   });
   //Create new root directory
   socket.on('lgd:createRootDir', function(name) {
-     
      if(name !== null && !dirExists(pathLGD + '/' + name) && name.indexOf('/') === -1){
-       console.log(name);
        console.log("create:" + pathLGD + '/' + name);
        fs.mkdirSync(pathLGD + '/' + name);
        dirLGD = getAllLGDFiles(pathLGD);
@@ -184,21 +189,6 @@ sio.on('connection', function(socket) {
        sio.emit('lgd:dir', dirLGD);
      }
   });
-  function deleteFolderRecursive(path) {
-    var files = [];
-    if( fs.existsSync(path) ) {
-        files = fs.readdirSync(path);
-        files.forEach(function(file,index){
-            var curPath = path + "/" + file;
-            if(fs.lstatSync(curPath).isDirectory()) { // recurse
-                deleteFolderRecursive(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
-    }
-};
   //Create new root directory
   socket.on('lgd:createRootFile', function(name) {
      if(name !== null && !fileExists(pathLGD + '/' + name) && name.indexOf('/') === -1){
@@ -246,6 +236,7 @@ sio.on('connection', function(socket) {
     socket.viewer.cursorPosition = position;
     }
   });
+
   socket.on('disconnect', function() {
     viewers.remove(socket.viewer);
   });

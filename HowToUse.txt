@@ -1,0 +1,5 @@
+
+1)Create a directory "NAMEOFDIRECTORY"
+2)Use the command "node server.js NAMEOFDIRECTORY" to start the server
+3)Now go on the website, you could create directory and files and modify files you clicked on.
+

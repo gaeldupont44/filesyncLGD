@@ -231,7 +231,7 @@ angular
     }
   };
 }).directive("lgdUpdate", function(){
-  //set caret position of the element used when file change
+  //set caret position of the element used when file is wrote by another viewer
   function setCaretPos(element, caretPos) {
     if (element.createTextRange) {
       var range = element.createTextRange();
@@ -252,7 +252,7 @@ angular
       caret: "=caretAware"
     },
     link: function(scope, element, attrs) {
-      //watch if scope.file change
+      //watch if the text change
       scope.$watch(
         function () {
           return scope.file;

@@ -14,8 +14,9 @@ angular.module('FileSync')
         }
       	socket.emit('viewer:new', nickname);
     	});
+
     socket.on('conversation',function(messages){
-	socket.emit('viewers', messages);
+	    socket.emit('viewers', messages);
     });
 
     socket.on('file:changed', function(filename, timestamp, content) {
