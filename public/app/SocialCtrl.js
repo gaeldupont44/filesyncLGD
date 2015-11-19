@@ -7,14 +7,16 @@ angular
     this.message = '';
     this.LGDdir = [];
     this.filename = 'Nom du Fichier';
-    this.filepath = '';
-    this.text = "Veuillez cliquer sur un fichier de l'arborescence";
+    this.filepath = 'NoPath';
+    this.text = "Veuillez cliquer sur un fichier de l'arborescence.";
     this.sendMessage = function() {
       SocketIOService.sendMessage(this.message);
       this.message = "";
     };
     this.lgdWrite = function() {
-      SocketIOService.lgdWrite(this.text);
+      if(this.filepath !== 'NoPath'){
+        SocketIOService.lgdWrite(this.text);
+      }
     };
     this.changeLGDfile = function(file){
       this.filename = file.name;
@@ -64,7 +66,15 @@ angular
       $scope.$apply();
     }
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
-
+    function onLGDfileRemoved(RemovedFilePath) {
+      if(this.filepath == RemovedFilePath){
+        this.filename = 'Nom du Fichier';
+        this.filepath = 'NoPath';
+        this.text = "Le fichier a été supprimé. Veuillez cliquer sur un fichier de l'arborescence.";
+        $scope.$apply();
+      }
+    }
+    SocketIOService.onLGDfileRemoved(onLGDfileRemoved.bind(this));
     //on caret position change
     $scope.$watch("cursor", function(caretPosition) {
       if(caretPosition != undefined){

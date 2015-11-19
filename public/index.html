@@ -51,7 +51,7 @@
         </ul>
       </div>
       
-      <h4 ng-bind="social.filename"></h4>
+      <h4 lgd-filename filepath="social.filepath" ng-bind="social.filename"></h4>
       <div id="LGDBox">
 	      <textarea lgd-update viewers="social.viewers" caret-aware="cursor" id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-blur="social.resetCursorPosition()" disabled="disabled"></textarea>
       </div>

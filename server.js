@@ -86,8 +86,10 @@ function deleteFolderRecursive(path) {
             var curPath = path + "/" + file;
             if(fs.lstatSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
-            } else { // delete file
+            } else {
+                // delete file
                 fs.unlinkSync(curPath);
+                sio.emit('lgd:fileRemoved', curPath);
             }
         });
         fs.rmdirSync(path);
@@ -214,6 +216,7 @@ sio.on('connection', function(socket) {
      if(path !== null){
       console.log("("+ socket.request.connection.remoteAddress +") remove by " + socket.viewer.nickname + ": " + path);
        fs.unlinkSync(path);
+       sio.emit('lgd:fileRemoved', path);
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
      }
@@ -221,13 +224,13 @@ sio.on('connection', function(socket) {
   //Change the file to write
   socket.on('lgd:changeFile', function(path) {
      if(path !== null){
-       socket.leave(socket.viewer.currentFilePath);
-       socket.join(path);
-       console.log("("+ socket.request.connection.remoteAddress + ") " + socket.viewer.nickname + 'change the current file to: ' + path);
-       viewers.updateCFP(socket.viewer, path);
-       socket.viewer.currentFilePath = path;
-       var text = fs.readFileSync(path, "utf8");
-       socket.emit('lgd:updated', text);
+      socket.leave(socket.viewer.currentFilePath);
+      socket.join(path);
+      console.log("("+ socket.request.connection.remoteAddress + ") " + socket.viewer.nickname + ' change the current file to: ' + path);
+      viewers.updateCFP(socket.viewer, path);
+      socket.viewer.currentFilePath = path;
+      var text = fs.readFileSync(path, "utf8");
+      socket.emit('lgd:updated', text);
      }
   });
   //Change the value of the caret position of the viewer

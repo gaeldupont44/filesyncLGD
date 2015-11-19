@@ -79,6 +79,9 @@ angular.module('FileSync')
       sendCursorPosition: function(position){
         socket.emit('lgd:changeCursor', position);
       },
+      onLGDfileRemoved: function(path){
+        socket.on('lgd:fileRemoved', path);
+      },
       onFileChanged: function(f) {
         _onFileChanged = f;
       },
