@@ -151,16 +151,14 @@ sio.on('connection', function(socket) {
   socket.on('message:new', function(message) {
     var message = new Message(socket.viewer.nickname, message);
     sio.emit('message:updated', message);
-    console.log("("+ socket.request.connection.remoteAddress +")");
   });
 
   //Write in the file
   socket.on('lgd:write', function(text) {
     if(socket.viewer.currentFilePath !== null){
-      console.log('path:'+socket.viewer.currentFilePath);
       if(fileExists(socket.viewer.currentFilePath)){
         fs.writeFileSync(socket.viewer.currentFilePath, text, "utf8");
-        console.log("Modification de " + socket.viewer.currentFilePath);
+        console.log(socket.viewer.nickname + " wrote on " + socket.viewer.currentFilePath);
         socket.broadcast.to(socket.viewer.currentFilePath).emit('lgd:updated', text);
       }
     }
@@ -168,7 +166,7 @@ sio.on('connection', function(socket) {
   //Create new root directory
   socket.on('lgd:createRootDir', function(name) {
      if(name !== null && !dirExists(pathLGD + '/' + name) && name.indexOf('/') === -1){
-       console.log("("+ socket.request.connection.remoteAddress +") create by " + socket.viewer.nickname + ": " + pathLGD + '/' + name);
+       console.log("Root directory created by " + socket.viewer.nickname + ": " + pathLGD + '/' + name);
        fs.mkdirSync(pathLGD + '/' + name);
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
@@ -177,7 +175,7 @@ sio.on('connection', function(socket) {
   //Create new directory
   socket.on('lgd:createDir', function(dir) {
      if(path !== null && !dirExists(dir.path + '/' + dir.name) && dir.name.indexOf('/') === -1){
-       console.log("("+ socket.request.connection.remoteAddress +") create by " + socket.viewer.nickname + ": " + dir.path + '/' + dir.name);
+       console.log("Directory created by " + socket.viewer.nickname + ": " + dir.path + '/' + dir.name);
        fs.mkdirSync(dir.path + '/' + dir.name);
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
@@ -186,17 +184,16 @@ sio.on('connection', function(socket) {
   //Remove a directory
   socket.on('lgd:removeDir', function(path) {
      if(path !== null){
-       console.log("("+ socket.request.connection.remoteAddress +") remove by " + socket.viewer.nickname + ": " + path);
+       console.log("Directory removed by " + socket.viewer.nickname + ": " + path);
        deleteFolderRecursive(path);
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
-
      }
   });
   //Create new root directory
   socket.on('lgd:createRootFile', function(name) {
      if(name !== null && !fileExists(pathLGD + '/' + name) && name.indexOf('/') === -1){
-       console.log("("+ socket.request.connection.remoteAddress +") create by " + socket.viewer.nickname + ": " + name);
+       console.log("Root file created by " + socket.viewer.nickname + ": " + name);
        fs.writeFileSync(pathLGD + '/' + name, '', "utf8");
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
@@ -205,7 +202,7 @@ sio.on('connection', function(socket) {
   //Create new file
   socket.on('lgd:createFile', function(file) {
      if(path !== null && !fileExists(file.path + '/' + file.name) && file.name.indexOf('/') === -1){
-       console.log("("+ socket.request.connection.remoteAddress +") create by " + socket.viewer.nickname + ": " + file.path + '/' + file.name);
+       console.log("File created by " + socket.viewer.nickname + ": " + file.path + '/' + file.name);
        fs.writeFileSync(file.path + '/' + file.name, '', "utf8");
        dirLGD = getAllLGDFiles(pathLGD);
        sio.emit('lgd:dir', dirLGD);
@@ -214,7 +211,7 @@ sio.on('connection', function(socket) {
   //Remove a file
   socket.on('lgd:removeFile', function(path) {
      if(path !== null){
-      console.log("("+ socket.request.connection.remoteAddress +") remove by " + socket.viewer.nickname + ": " + path);
+       console.log("File removed by " + socket.viewer.nickname + ": " + path);
        fs.unlinkSync(path);
        sio.emit('lgd:fileRemoved', path);
        dirLGD = getAllLGDFiles(pathLGD);
@@ -226,7 +223,7 @@ sio.on('connection', function(socket) {
      if(path !== null){
       socket.leave(socket.viewer.currentFilePath);
       socket.join(path);
-      console.log("("+ socket.request.connection.remoteAddress + ") " + socket.viewer.nickname + ' change the current file to: ' + path);
+      console.log(socket.viewer.nickname + ' change his current file to: ' + path);
       viewers.updateCFP(socket.viewer, path);
       socket.viewer.currentFilePath = path;
       var text = fs.readFileSync(path, "utf8");
@@ -236,8 +233,8 @@ sio.on('connection', function(socket) {
   //Change the value of the caret position of the viewer
   socket.on('lgd:changeCursor', function(position) {
     if(socket.viewer != null){
-    viewers.updatePos(socket.viewer, position);
-    socket.viewer.cursorPosition = position;
+      viewers.updatePos(socket.viewer, position);
+      socket.viewer.cursorPosition = position;
     }
   });
 

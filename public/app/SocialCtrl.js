@@ -6,15 +6,15 @@ angular
     this.messages = [];
     this.message = '';
     this.LGDdir = [];
-    this.filename = 'Nom du Fichier';
-    this.filepath = 'NoPath';
+    this.filename = 'Aucun fichier sélectionné';
+    this.filepath = '';
     this.text = "Veuillez cliquer sur un fichier de l'arborescence.";
     this.sendMessage = function() {
       SocketIOService.sendMessage(this.message);
       this.message = "";
     };
     this.lgdWrite = function() {
-      if(this.filepath !== 'NoPath'){
+      if(this.filepath !== ''){
         SocketIOService.lgdWrite(this.text);
       }
     };
@@ -68,8 +68,8 @@ angular
     SocketIOService.onLGDUpdated(onLGDUpdated.bind(this));
     function onLGDfileRemoved(RemovedFilePath) {
       if(this.filepath == RemovedFilePath){
-        this.filename = 'Nom du Fichier';
-        this.filepath = 'NoPath';
+        this.filename = 'Aucun fichier sélectionné';
+        this.filepath = '';
         this.text = "Le fichier a été supprimé. Veuillez cliquer sur un fichier de l'arborescence.";
         $scope.$apply();
       }
@@ -157,7 +157,7 @@ angular
     require: '^ngController', //Solve recursive problem
     replace: true,
     template: "<form style='display: none;'>"+
-          "<input type='text' class='LGDFileDirInput' placeholder='Nom du fichier' />"+
+          "<input type='text' class='LGDFileDirInput' placeholder='Aucun fichier sélectionné' />"+
           "<input type='submit' class='LGDFileDirInput' value='Créer' />"+
           "</form>",
     link: function (scope, element, attrs, SocialCtrl) {
@@ -240,6 +240,26 @@ angular
       });
     }
   };
+}).directive('lgdfilename', function () {
+  return {
+    scope: {
+      filename: '=filename',
+      filepath: '=filepath',
+    },
+    template: "<h4>{{filename}}</h4>",
+    link: function (scope, element, attrs) {
+      scope.$watch(
+        function () {
+          return scope.filepath;
+        },
+        function (){
+          if(scope.filepath === '') {
+            var taLGD = angular.element(document.querySelector('#LGDtext'));
+            taLGD.attr('disabled', 'disabled');
+          }
+      });
+    }
+  };
 }).directive("lgdUpdate", function(){
   //set caret position of the element used when file is wrote by another viewer
   function setCaretPos(element, caretPos) {
@@ -279,7 +299,7 @@ angular
           return scope.viewers;
         },
         function (viewers) {
-          if(scope.$parent.social.filename !== 'Nom du Fichier'){
+          if(scope.$parent.social.filename !== 'Aucun fichier sélectionné'){
             //remove all previous rectangle created
             var viewersRect = angular.element(document.getElementsByClassName("viewers"));	
             for(var i= 0; i < viewersRect.length; i++){
