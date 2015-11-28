@@ -33,27 +33,27 @@
       </form>
     </div>
 
-    <div class="container" ng-controller="SocialCtrl as social">
+    <div class="container" ng-controller="LGDCtrl as lgd">
       <div id="ListFilesBox">
         <ul>
           <li>
             <span class='LGDdirs'>/</span>
-            <form style='display: inline;' ng-submit='social.createLGDrootDir()'>
+            <form style='display: inline;' ng-submit='lgd.createLGDrootDir()'>
               <input type='text' class='LGDFileDirInput' ng-model='DirName' name='DirName' placeholder='Nom du dossier' />
               <input type='submit' class='LGDFileDirInput' value='Créer' />
               </form>
-            <form style='display: inline;' ng-submit='social.createLGDrootFile()'>
+            <form style='display: inline;' ng-submit='lgd.createLGDrootFile()'>
               <input type='text' class='LGDFileDirInput' ng-model='FileName' name='FileName' placeholder='Nom du fichier' />
               <input type='submit' class='LGDFileDirInput' value='Créer' />
             </form>
           </li>
-          <collection collection='social.LGDdir'></collection>
+          <collection collection='lgd.LGDdir'></collection>
         </ul>
       </div>
       
-      <lgdfilename filepath="social.filepath" filename="social.filename"></lgdfilename>
+      <lgdfilename filepath="lgd.filepath" filename="lgd.filename"></lgdfilename>
       <div id="LGDBox">
-	      <textarea lgd-update viewers="social.viewers" caret-aware="cursor" id="LGDtext" ng-model="social.text" ng-change="social.lgdWrite()" ng-blur="social.resetCursorPosition()" disabled="disabled"></textarea>
+	      <textarea lgd-update viewers="lgd.viewers" caret-aware="cursor" id="LGDtext" ng-model="lgd.text" ng-change="lgd.lgdWrite()" ng-blur="lgd.resetCursorPosition()" disabled="disabled"></textarea>
       </div>
     </div>
 
@@ -117,6 +117,7 @@
     <script src="/app/caretaware.min.js" type="text/javascript"></script>
     <script src="/app/HistoryCtrl.js" type="text/javascript"></script>
     <script src="/app/HistoryService.js" type="text/javascript"></script>
+    <script src="/app/LGDCtrl.js" type="text/javascript"></script>
     <script src="/app/SocketIOService.js" type="text/javascript"></script>
     <script src="/app/SocialCtrl.js" type="text/javascript"></script>
     <script src="/app/VisibilityService.js" type="text/javascript"></script>
