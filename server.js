@@ -98,7 +98,7 @@ function deleteFolderRecursive(path) {
 
 function Message(nickname, msg) {
   this.nickname = nickname;
-  this.msg = msg;
+  this.content = msg;
 };
 
 function Viewers(sio) {

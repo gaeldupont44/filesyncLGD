@@ -70,7 +70,7 @@ body {
     height: 100%;
 }
 
-#whoIsOnlineBox {
+#viewersBox {
     position: absolute;
     top: 0;
     height: 20%;
@@ -80,7 +80,7 @@ body {
     border: 1px solid blue;
 }
 
-#whoIsOnlineList {
+#viewersList {
     margin: 0;
     padding: 0;
 }

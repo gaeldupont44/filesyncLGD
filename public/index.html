@@ -9,28 +9,23 @@
   </head>
 
   <body>
-    <div id="rightBox" class="container" ng-controller="SocialCtrl as social">
-      <div id="whoIsOnlineBox">      
-        <span>Personnes en ligne: </span>
-        <ul id="whoIsOnlineList" class="animate list-group">
-	  <li class="list-group-item" ng-repeat="viewer in social.viewers track by $index" style="padding: 0;" >{{ viewer.nickname }}</li>
-        </ul>
+    <div id="rightBox" class="container">
+      <div ng-controller="ViewersCtrl as viewers">
+        <viewers viewers="viewers.viewers"></viewers>
       </div>
-      <div id="chatTextBox">
-        <div class="wrap" id="chatText" autoscroll-down>
-          <div ng-repeat="message in social.messages" class="animate" style="width: 100%;">
-            {{ message.nickname }}: {{ message.msg }}
-          </div>
-        </div>
+      <div ng-controller="MessagesCtrl as messages">
+        <messages messages="messages.messages"></messages>
       </div>
-      <form class="inline-form" id="chatForm" ng-submit="social.sendMessage()">
+      <div ng-controller="MessageCtrl as message">
+      <form class="inline-form" id="chatForm" ng-submit="message.sendMessage()">
         <input type="text"
         id="chatInput"
-        ng-model="social.message"
+        ng-model="message.message"
         name="name"
         class="form-control"
         placeholder="Ecrire un texte.." />
       </form>
+      </div>
     </div>
 
     <div class="container" ng-controller="LGDCtrl as lgd">
@@ -119,8 +114,14 @@
     <script src="/app/HistoryService.js" type="text/javascript"></script>
     <script src="/app/LGDCtrl.js" type="text/javascript"></script>
     <script src="/app/SocketIOService.js" type="text/javascript"></script>
-    <script src="/app/SocialCtrl.js" type="text/javascript"></script>
     <script src="/app/VisibilityService.js" type="text/javascript"></script>
+    <script src="/app/viewers/ViewersCtrl.js" type="text/javascript"></script>
+    <script src="/app/viewers/ViewersDirective.js" type="text/javascript"></script>
+    <script src="/app/viewers/viewer/ViewerDirective.js" type="text/javascript"></script>
+    <script src="/app/chat/messages/MessagesCtrl.js" type="text/javascript"></script>
+    <script src="/app/chat/messages/MessagesDirective.js" type="text/javascript"></script>
+    <script src="/app/chat/messages/message/MessageCtrl.js" type="text/javascript"></script>
+    <script src="/app/chat/messages/message/MessageDirective.js" type="text/javascript"></script>
   </body>
 </html>
 

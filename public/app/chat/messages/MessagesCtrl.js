@@ -1,25 +1,13 @@
 'use strict';
 angular
   .module('FileSync')
-  .controller('SocialCtrl', ['$scope', 'SocketIOService', function($scope, SocketIOService) {
-    this.viewers = [];
+  .controller('MessagesCtrl', ['$scope', 'SocketIOService', function($scope, SocketIOService) {
     this.messages = [];
-    this.message = '';
-    this.sendMessage = function() {
-      SocketIOService.sendMessage(this.message);
-      this.message = "";
-    };
     function onMessagesUpdated(message) {
       this.messages.push(message);
       $scope.$apply();
     }
     SocketIOService.onMessagesUpdated(onMessagesUpdated.bind(this));
-
-    function onViewersUpdated(viewers) {
-      this.viewers = viewers;
-      $scope.$apply();
-    }
-    SocketIOService.onViewersUpdated(onViewersUpdated.bind(this));
   }])
 .directive('autoscrollDown', function () {
   return {
