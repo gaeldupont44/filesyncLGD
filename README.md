@@ -29,14 +29,14 @@ FileSync was first made during a lecture on AngularJS/Socket.io/NodeJS with IUT 
 
 ```
 npm i filesync -g
-filesync-server
-filesync-relay /path/to/directory
+node server.js /path/of/directory
 ```
 
 ## [Changelog](/CHANGELOG.md)
 
+Add a "google docs like" feature.
 ## Contribute / TODO
-
+I had a problem to show the file of directory recursivly. I just put the Controller information in the directive.
 See [issues](https://github.com/FGRibreau/filesync/issues) there is still a lot of things to do/improve note that **I will happily merge any pull-requests that solve each of the specified issues**.
 
 ## Bonus
